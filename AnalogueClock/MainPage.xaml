@@ -27,7 +27,7 @@
             <Ellipse x:Name="innerBlack" Width="270" Height="270" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
             <Ellipse x:Name="gray" Width="260" Height="260" StrokeThickness="5" Stroke="Gray" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
 
-            <Ellipse Fill="DarkGoldenrod" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Ellipse Fill="OliveDrab" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
             <Ellipse Fill="Black" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
 
 
