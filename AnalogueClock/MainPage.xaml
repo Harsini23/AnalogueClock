@@ -1,0 +1,93 @@
+﻿<Page
+    x:Class="AnalogueClock.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AnalogueClock"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="twelveHrFont">
+            <Setter Property="FontSize" Value="30"></Setter>
+            <Setter Property="FontFamily" Value="XamlAutoFontFamily"></Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="twentyfourHrFont">
+            <Setter Property="FontSize" Value="18"></Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid Width="400" Height="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="13*"/>
+            </Grid.ColumnDefinitions>
+            <Ellipse x:Name="outerBlack" Width="280" Height="280" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+            <Ellipse x:Name="innerBlack" Width="270" Height="270" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+            <Ellipse x:Name="gray" Width="260" Height="260" StrokeThickness="5" Stroke="Gray" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+
+            <Ellipse Fill="DarkGoldenrod" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Ellipse Fill="Black" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+
+
+            <!--hour-->
+            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="5" X1="70" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
+                <Line.RenderTransform>
+                    <CompositeTransform x:Name="Hour" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                </Line.RenderTransform>
+            </Line>
+            <!--minute-->
+            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="3" X1="105" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
+                <Line.RenderTransform>
+                    <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1"></CompositeTransform>
+                </Line.RenderTransform>
+            </Line>
+            <!--second-->
+            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
+                <Line.RenderTransform>
+                    <CompositeTransform x:Name="Second" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                </Line.RenderTransform>
+            </Line>
+
+            <Canvas Name="DotCanvas" Width="260" Height="260" Grid.ColumnSpan="2 "></Canvas>
+
+            <Canvas Name="NumberCanvas"  Width="225" Height="235" Grid.ColumnSpan="2">
+
+                <TextBlock Text="1" x:Name="textblock1" ></TextBlock>
+                <TextBlock  Text="2" x:Name="textblock2"  ></TextBlock>
+                <TextBlock  Text="3" x:Name="textblock3"></TextBlock>
+                <TextBlock  Text="4" x:Name="textblock4"  ></TextBlock>
+                <TextBlock  Text="5" x:Name="textblock5"  ></TextBlock>
+
+                <TextBlock  Text="7" x:Name="textblock7"  ></TextBlock>
+                <TextBlock  Text="8" x:Name="textblock8"  ></TextBlock>
+                <TextBlock  Text="9" x:Name="textblock9"  ></TextBlock>
+                <TextBlock  Text="10" x:Name="textblock10"  ></TextBlock>
+                <TextBlock  Text="11" x:Name="textblock11"  ></TextBlock>
+
+                <TextBlock  Text="13" x:Name="textblock13"></TextBlock>
+                <TextBlock  Text="14" x:Name="textblock14"></TextBlock>
+                <TextBlock  Text="15" x:Name="textblock15"></TextBlock>
+                <TextBlock  Text="16" x:Name="textblock16"></TextBlock>
+                <TextBlock  Text="17" x:Name="textblock17"   ></TextBlock>
+
+                <TextBlock  Text="19" x:Name="textblock19"></TextBlock>
+                <TextBlock  Text="20" x:Name="textblock20"></TextBlock>
+                <TextBlock  Text="21" x:Name="textblock21"></TextBlock>
+                <TextBlock  Text="22" x:Name="textblock22"></TextBlock>
+                <TextBlock  Text="23" x:Name="textblock23"></TextBlock>
+
+                <TextBlock   x:Name="top" Canvas.Top="0" Canvas.Left="95"></TextBlock>
+                <TextBlock   x:Name="left" Canvas.Top="100" Canvas.Left="0"></TextBlock>
+                <TextBlock   x:Name="right" Canvas.Top="100" Canvas.Left="200" ></TextBlock>
+                <TextBlock   x:Name="bottom" Canvas.Top="200" Canvas.Left="100" ></TextBlock>
+            </Canvas>
+
+
+
+        </Grid>
+        <Button x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="resultTime"></TextBlock>
+    </Grid>
+</Page>
