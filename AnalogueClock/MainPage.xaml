@@ -94,3 +94,4 @@
         <Button Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
     </Grid>
 </Page>
+<!--Adding new feature f1-->
