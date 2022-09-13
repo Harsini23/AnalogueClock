@@ -148,9 +148,18 @@ namespace AnalogueClock
             int inccount = 0;
             bool flag=false;
             if(incrementAngle==30) flag= true;
-            if (r < 70 && flag == false)
+
+            if (r < 90 && flag == false)
             {
                 Style s = (Style)Resources["twentyfourHrFontSmall"];
+                foreach (var i in allNumberTextBlock)
+                {
+                    i.Style = s;
+                }
+            }
+            else 
+            {
+                Style s = (Style)Resources["twelveHrFont"];
                 foreach (var i in allNumberTextBlock)
                 {
                     i.Style = s;
@@ -214,7 +223,7 @@ namespace AnalogueClock
 
         private void Decrement_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width > 220)
+            if (outerBlack.Width > 250 || ( outerBlack.Width>220 && clockState=="twelve"))
             {
                 DecreaseClockSize();
                 if (clockState == "twelve")
