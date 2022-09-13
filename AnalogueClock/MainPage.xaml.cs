@@ -143,10 +143,19 @@ namespace AnalogueClock
 
         private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> allNumberTextBlock, int incrementSkip, int incrementAngle)
         {
+           
             double x1, y1;
             int inccount = 0;
             bool flag=false;
             if(incrementAngle==30) flag= true;
+            if (r < 70 && flag == false)
+            {
+                Style s = (Style)Resources["twentyfourHrFontSmall"];
+                foreach (var i in allNumberTextBlock)
+                {
+                    i.Style = s;
+                }
+            }
 
             foreach (var i in allNumberTextBlock)
             {
