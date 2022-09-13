@@ -17,46 +17,51 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
+    <ScrollViewer>
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="450"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Width="400" Height="400">
+        <Grid x:Name="OverallClockContainer" Width="450" Height="450" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="17*"/>
                 <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
-            <Ellipse x:Name="outerBlack" Width="280" Height="280" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
-            <Ellipse x:Name="innerBlack" Width="270" Height="270" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
-            <Ellipse x:Name="gray" Width="260" Height="260" StrokeThickness="5" Stroke="Gray" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+            <Ellipse x:Name="outerBlack" Width="280" Height="{x:Bind outerBlack.Width}" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+            <Ellipse x:Name="innerBlack" Width="270" Height="{x:Bind innerBlack.Width}" StrokeThickness="20" Stroke="Black" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
+            <Ellipse x:Name="gray" Width="260" Height="{x:Bind gray.Width}" StrokeThickness="5" Stroke="Gray" Grid.ColumnSpan="2" Fill="LightGray"></Ellipse>
 
             <Ellipse Fill="OliveDrab" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
             <Ellipse Fill="Black" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
 
 
-            <!--hour-->
-            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="5" X1="70" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
+            <!--second-->
+            <Line x:Name="secondHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="226,225,8,81" Grid.ColumnSpan="2" UseLayoutRounding="False" d:LayoutRounding="Auto"  >
                 <Line.RenderTransform>
-                    <CompositeTransform x:Name="Hour" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                    <CompositeTransform x:Name="Second" CenterX="0" CenterY="0" ScaleY="-1" Rotation="726.945"></CompositeTransform>
                 </Line.RenderTransform>
             </Line>
             <!--minute-->
-            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="3" X1="105" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
+            <Line x:Name="minuteHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="2" X1="105" Margin="226,225,8,81" Grid.ColumnSpan="2"  >
                 <Line.RenderTransform>
-                    <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1"></CompositeTransform>
-                </Line.RenderTransform>
-            </Line>
-            <!--second-->
-            <Line StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="200,200,-36,96" Grid.ColumnSpan="2"  >
-                <Line.RenderTransform>
-                    <CompositeTransform x:Name="Second" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                    <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1" ></CompositeTransform>
                 </Line.RenderTransform>
             </Line>
 
-            <Canvas Name="DotCanvas" Width="260" Height="260" Grid.ColumnSpan="2 "></Canvas>
+            <!--hour-->
+            <Line x:Name="hourHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="4" X1="80" Margin="226,225,8,81" Grid.ColumnSpan="2"  >
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <CompositeTransform x:Name="Hour" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
 
-            <Canvas Name="NumberCanvas"  Width="225" Height="235" Grid.ColumnSpan="2">
+
+            <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" Grid.ColumnSpan="2 "></Canvas>
+
+            <Canvas Name="NumberCanvas"  Width="260" Height="260" Grid.ColumnSpan="2">
 
                 <TextBlock Text="1" x:Name="textblock1" ></TextBlock>
                 <TextBlock  Text="2" x:Name="textblock2"  ></TextBlock>
@@ -88,20 +93,10 @@
                 <TextBlock   x:Name="bottom" Canvas.Top="200" Canvas.Left="100" ></TextBlock>
             </Canvas>
 
-
-
         </Grid>
-        <Button Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
+        <Button Margin="40" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
+        <Button Margin="40" Grid.Row="1" Content="Increment" x:Name="Inc" Click="Increment_Click"></Button>
+        <Button Margin="40" HorizontalAlignment="Right" Grid.Row="1" Content="Decrement" x:Name="Dec" Click="Decrement_Click"></Button>
     </Grid>
+    </ScrollViewer>
 </Page>
-<!--Adding new feature f1-->
-    
-    
-<!--Adding new feature f2-->
-    
-    
-<!--Completed the feature with f3-->
-<!--Adding new feature f1-->
-    
-    
-<!--Adding new feature f2-->
