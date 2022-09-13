@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,16 +23,18 @@ namespace AnalogueClock
         public string clockState = "twelve";
         public int TweleveHrDotRadius = 120, TwentyFourHrDotRadius = 135;
         public int TweleveHrNumberRadius = 98, TwentyFourHrNumberRadius = 120;
+        public int FromSecond =-90+DateTime.Now.Second*6;
+       
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         public MainPage()
         {
             this.InitializeComponent();
+            Debug.WriteLine("Timee"+ FromSecond);
 
             //initialize to modify visiblity and access all textboxes
-          
-          
-         
+
+
             //set dots representing minutes 
             for (int i = 0; i < 60; i++)
             {
@@ -115,13 +118,11 @@ namespace AnalogueClock
         //update when the datetime changes
         private void Timer_Tick_24(object sender, object e)
         {
-            Second.Rotation = (DateTime.Now.Second * 6) - 90;
             Minute.Rotation = (DateTime.Now.Minute * 6) - 90;
             Hour.Rotation = (DateTime.Now.Hour * 15) + (DateTime.Now.Minute * 0.25) - 90;
         }
         private void Timer_Tick_12(object sender, object e)
         {
-            Second.Rotation = (DateTime.Now.Second * 6) - 90;
             Minute.Rotation = (DateTime.Now.Minute * 6) - 90;
             Hour.Rotation = (DateTime.Now.Hour * 30) + (DateTime.Now.Minute * 0.5) - 90;
         }
@@ -194,6 +195,11 @@ namespace AnalogueClock
                     AlignDots(TwentyFourHrDotRadius -= 10, 15, false);
                 }
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            myStoryBoard.Begin();
         }
 
         private void Increment_Click(object sender, RoutedEventArgs e)
