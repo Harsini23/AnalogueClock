@@ -61,37 +61,8 @@
 
             <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" Grid.ColumnSpan="2 "></Canvas>
 
-            <Canvas Name="NumberCanvas"  Width="260" Height="260" Grid.ColumnSpan="2">
-
-                <TextBlock Text="1" x:Name="textblock1" ></TextBlock>
-                <TextBlock  Text="2" x:Name="textblock2"  ></TextBlock>
-                <TextBlock  Text="3" x:Name="textblock3"></TextBlock>
-                <TextBlock  Text="4" x:Name="textblock4"  ></TextBlock>
-                <TextBlock  Text="5" x:Name="textblock5"  ></TextBlock>
-
-                <TextBlock  Text="7" x:Name="textblock7"  ></TextBlock>
-                <TextBlock  Text="8" x:Name="textblock8"  ></TextBlock>
-                <TextBlock  Text="9" x:Name="textblock9"  ></TextBlock>
-                <TextBlock  Text="10" x:Name="textblock10"  ></TextBlock>
-                <TextBlock  Text="11" x:Name="textblock11"  ></TextBlock>
-
-                <TextBlock  Text="13" x:Name="textblock13"></TextBlock>
-                <TextBlock  Text="14" x:Name="textblock14"></TextBlock>
-                <TextBlock  Text="15" x:Name="textblock15"></TextBlock>
-                <TextBlock  Text="16" x:Name="textblock16"></TextBlock>
-                <TextBlock  Text="17" x:Name="textblock17"   ></TextBlock>
-
-                <TextBlock  Text="19" x:Name="textblock19"></TextBlock>
-                <TextBlock  Text="20" x:Name="textblock20"></TextBlock>
-                <TextBlock  Text="21" x:Name="textblock21"></TextBlock>
-                <TextBlock  Text="22" x:Name="textblock22"></TextBlock>
-                <TextBlock  Text="23" x:Name="textblock23"></TextBlock>
-
-                <TextBlock   x:Name="top" Canvas.Top="0" Canvas.Left="95"></TextBlock>
-                <TextBlock   x:Name="left" Canvas.Top="100" Canvas.Left="0"></TextBlock>
-                <TextBlock   x:Name="right" Canvas.Top="100" Canvas.Left="200" ></TextBlock>
-                <TextBlock   x:Name="bottom" Canvas.Top="200" Canvas.Left="100" ></TextBlock>
-            </Canvas>
+                <Canvas Name="NumberCanvas"  Grid.ColumnSpan="2" Width="260" Height="{x:Bind NumberCanvas.Height}">
+                </Canvas>
 
         </Grid>
         <Button Margin="40" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>

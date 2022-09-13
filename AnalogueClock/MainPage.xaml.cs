@@ -21,22 +21,17 @@ namespace AnalogueClock
         DispatcherTimer timer = new DispatcherTimer();
         public string clockState = "twelve";
         public int TweleveHrDotRadius = 120, TwentyFourHrDotRadius = 135;
-        
+        public int TweleveHrNumberRadius = 98, TwentyFourHrNumberRadius = 120;
 
-        TextBlock[] VisibilityTextBlocks;
-        TextBlock[] AllTextBlocks;
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         public MainPage()
         {
             this.InitializeComponent();
 
             //initialize to modify visiblity and access all textboxes
-            TextBlock[] addtextBlocks = { textblock13, textblock14, textblock15, textblock16, textblock17, textblock19, textblock20, textblock21, textblock22, textblock23, textblock3, textblock9 };
-            TextBlock[] addall = { top, left, right, bottom, textblock13, textblock14, textblock15, textblock16, textblock17, textblock19, textblock20, textblock21, textblock22, textblock23, textblock3, textblock9, textblock1, textblock10, textblock11, textblock2, textblock4, textblock5, textblock7, textblock8 };
           
-            VisibilityTextBlocks = addtextBlocks;
-            AllTextBlocks = addall;
-
+          
+         
             //set dots representing minutes 
             for (int i = 0; i < 60; i++)
             {
@@ -72,40 +67,25 @@ namespace AnalogueClock
             
         }
 
+     
+
         //set for 12 hr format
         public void TwelveHrClock()
         {
             //set allignment
             int[] CanvasAlignmentValues = { 0, 95, 100, 0, 100, 200, 200, 100 };
-            SetCanvasProperties(CanvasAlignmentValues);
+           // SetCanvasProperties(CanvasAlignmentValues);
             NumberCanvas.Width = 220; NumberCanvas.Height = 235;
             outerBlack.Width = 280; outerBlack.Height = 280;
             innerBlack.Width = 270; innerBlack.Height = 270;
             gray.Height = 260; gray.Width = 260;
 
 
-
-            //switch style,visibility and text
-            Style s = (Style)Resources["twelveHrFont"];
-            foreach (var i in AllTextBlocks)
-            {
-                i.Style = s;
-            }
-            foreach (var i in VisibilityTextBlocks)
-            {
-                i.Visibility = Visibility.Collapsed;
-            }
-
-            top.Text = "12"; bottom.Text = "6"; right.Text = "3"; left.Text = "9";
-
+        
             //subscribe to 12 hr tick
             timer.Tick += Timer_Tick_12;
 
-            //calculate position align numbers r initialangle valuenumberblock buffer
-            List<TextBlock> valueNumberBlocks = new List<TextBlock> { textblock1, textblock2, textblock4, textblock5, textblock7, textblock8, textblock10, textblock11 };
-            valueNumberBlocks.Reverse();
-             calculateNumberAlignment(98, -240, valueNumberBlocks, 2, 30);
-
+            //calculate position align numbers r initialangle valuenumberblock buffer -> calculateNumberAlignment
             //align dots
             AlignDots(TweleveHrDotRadius, 6, true);
 
@@ -117,34 +97,16 @@ namespace AnalogueClock
             //set allignment
             int[] CanvasAlignmentValues = { -20, 100, 100, -20, 100, 220, 220, 100 };
 
-            SetCanvasProperties(CanvasAlignmentValues);
+           // SetCanvasProperties(CanvasAlignmentValues);
             NumberCanvas.Width = 220; NumberCanvas.Height = 230;
             outerBlack.Width = 310; outerBlack.Height = 310;
             innerBlack.Width = 300; innerBlack.Height = 300;
             gray.Height = 290; gray.Width = 290;
 
-
-            //switch style,visibility and text
-            Style s = (Style)Resources["twentyfourHrFont"];
-            foreach (var i in AllTextBlocks)
-            {
-                i.Style = s;
-            }
-
-            foreach (var i in VisibilityTextBlocks)
-            {
-                i.Visibility = Visibility.Visible;
-            }
-            top.Text = "24"; bottom.Text = "12"; right.Text = "6"; left.Text = "18";
-
-
             //subscribe to 24tick
             timer.Tick += Timer_Tick_24;
 
-            // calculate number positions
-            List<TextBlock> valueNumberBlocks = new List<TextBlock> { textblock1, textblock2, textblock3, textblock4, textblock5, textblock7, textblock8, textblock9, textblock10, textblock11, textblock13, textblock14, textblock15, textblock16, textblock17, textblock19, textblock20, textblock21, textblock22, textblock23 };
-            valueNumberBlocks.Reverse();
-              calculateNumberAlignment(120, -255, valueNumberBlocks, 5, 15);
+            // calculate number positions - > calculateNumberAlignment
 
             //calculate dot positions
             AlignDots(TwentyFourHrDotRadius, 15, false);
@@ -166,17 +128,6 @@ namespace AnalogueClock
 
        
 
-        private void SetCanvasProperties(int[] propertyValues)
-        {
-            int i = 0;
-            List<TextBlock> fixedTextBlock = new List<TextBlock> { top, left, right, bottom };
-            foreach (var t in fixedTextBlock)
-            {
-                t.SetValue(Canvas.TopProperty, propertyValues[i++]);
-                t.SetValue(Canvas.LeftProperty, propertyValues[i++]);
-            }
-        }
-
         private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> valueNumberBlocks, int incrementSkip, int incrementAngle)
         {
             double x1, y1;
@@ -190,10 +141,7 @@ namespace AnalogueClock
                 i.SetValue(Canvas.LeftProperty, x1);
                 i.SetValue(Canvas.TopProperty, y1);
                 initialangle += incrementAngle;
-                if (inccount % incrementSkip == 0)
-                {
-                    initialangle += incrementAngle;
-                }
+               
             }
 
         }
@@ -237,10 +185,12 @@ namespace AnalogueClock
                 DecreaseClockSize();
                 if (clockState == "twelve")
                 {
+                    //calaculte number textblocks resizing
                     AlignDots(TweleveHrDotRadius -= 10, 6, true);
                 }
                 else
                 {
+                    //calaculte number textblocks resizing
                     AlignDots(TwentyFourHrDotRadius -= 10, 15, false);
                 }
             }
@@ -253,10 +203,12 @@ namespace AnalogueClock
                 IncreaseClockSize();
                 if (clockState == "twelve")
                 {
+                    //calaculte number textblocks resizing
                     AlignDots(TweleveHrDotRadius += 10, 6, true);
                 }
                 else
                 {
+                    //calaculte number textblocks resizing
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                 }
             }
@@ -266,6 +218,7 @@ namespace AnalogueClock
             if (clockState == "twelve")
             {
                 clockState = "twentyfour";
+                this.TwentyFourHrNumberRadius = 120;
                 this.TwentyFourHrDotRadius = 135;
                 ResetHandSize();
                 TwentyFourHrClock();
@@ -274,6 +227,7 @@ namespace AnalogueClock
             else
             {
                 clockState = "twelve";
+                this.TweleveHrNumberRadius = 98;
                 this.TweleveHrDotRadius = 120;
                 ResetHandSize();
                 TwelveHrClock();
