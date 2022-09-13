@@ -27,12 +27,27 @@ namespace AnalogueClock
        
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
+        List<TextBlock> allNumberTextBlock = new List<TextBlock>();
+
         public MainPage()
         {
             this.InitializeComponent();
             Debug.WriteLine("Timee"+ FromSecond);
 
+
             //initialize to modify visiblity and access all textboxes
+            //intializing textblocks 12 hr
+            List<TextBlock> NumberTextBlock = new List<TextBlock>();
+            for (int i = 0; i < 24; i++)
+            {
+                TextBlock t = new TextBlock();
+                t.Text= (i+1).ToString();
+                NumberCanvas.Children.Add(t);
+                NumberTextBlock.Add(t);
+            }
+            NumberTextBlock.Reverse();
+
+            allNumberTextBlock = NumberTextBlock;
 
 
             //set dots representing minutes 
@@ -53,7 +68,6 @@ namespace AnalogueClock
         //increase size
         public void IncreaseClockSize()
         {
-            NumberCanvas.Width += 20; NumberCanvas.Height += 20;
             outerBlack.Width += 20; outerBlack.Height += 20;
             innerBlack.Width += 20; innerBlack.Height += 20;
             gray.Height += 20; gray.Width += 20;
@@ -62,7 +76,6 @@ namespace AnalogueClock
 
         public void DecreaseClockSize()
         {
-            NumberCanvas.Width -= 20; NumberCanvas.Height -= 20;
             outerBlack.Width -= 20; outerBlack.Height -= 20;
             innerBlack.Width -= 20; innerBlack.Height -= 20;
             gray.Height -= 20; gray.Width -= 20;
@@ -77,7 +90,6 @@ namespace AnalogueClock
         {
             //set allignment
             int[] CanvasAlignmentValues = { 0, 95, 100, 0, 100, 200, 200, 100 };
-           // SetCanvasProperties(CanvasAlignmentValues);
             NumberCanvas.Width = 220; NumberCanvas.Height = 235;
             outerBlack.Width = 280; outerBlack.Height = 280;
             innerBlack.Width = 270; innerBlack.Height = 270;
@@ -89,6 +101,7 @@ namespace AnalogueClock
             timer.Tick += Timer_Tick_12;
 
             //calculate position align numbers r initialangle valuenumberblock buffer -> calculateNumberAlignment
+            calculateNumberAlignment(TweleveHrNumberRadius, -270, allNumberTextBlock, 2, 30);
             //align dots
             AlignDots(TweleveHrDotRadius, 6, true);
 
@@ -100,7 +113,6 @@ namespace AnalogueClock
             //set allignment
             int[] CanvasAlignmentValues = { -20, 100, 100, -20, 100, 220, 220, 100 };
 
-           // SetCanvasProperties(CanvasAlignmentValues);
             NumberCanvas.Width = 220; NumberCanvas.Height = 230;
             outerBlack.Width = 310; outerBlack.Height = 310;
             innerBlack.Width = 300; innerBlack.Height = 300;
@@ -110,7 +122,7 @@ namespace AnalogueClock
             timer.Tick += Timer_Tick_24;
 
             // calculate number positions - > calculateNumberAlignment
-
+            calculateNumberAlignment(TwentyFourHrNumberRadius, -270,allNumberTextBlock, 5, 15);
             //calculate dot positions
             AlignDots(TwentyFourHrDotRadius, 15, false);
         }
@@ -129,20 +141,32 @@ namespace AnalogueClock
 
        
 
-        private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> valueNumberBlocks, int incrementSkip, int incrementAngle)
+        private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> allNumberTextBlock, int incrementSkip, int incrementAngle)
         {
             double x1, y1;
             int inccount = 0;
+            bool flag=false;
+            if(incrementAngle==30) flag= true;
 
-            foreach (var i in valueNumberBlocks)
+            foreach (var i in allNumberTextBlock)
             {
                 inccount++;
+                if (flag == true && inccount <= 12)
+                {
+                    i.Visibility = Visibility.Collapsed;
+                    continue;
+                }
+                else
+                {
+                    i.Visibility = Visibility.Visible;
+                }
+               
                 x1 = 110 + r * Math.Cos(Math.PI * initialangle / 180.0) - 10;
                 y1 = 110 - r * Math.Sin(Math.PI * initialangle / 180.0) - 10;
                 i.SetValue(Canvas.LeftProperty, x1);
                 i.SetValue(Canvas.TopProperty, y1);
                 initialangle += incrementAngle;
-               
+              
             }
 
         }
@@ -188,10 +212,13 @@ namespace AnalogueClock
                 {
                     //calaculte number textblocks resizing
                     AlignDots(TweleveHrDotRadius -= 10, 6, true);
+                    calculateNumberAlignment(TweleveHrNumberRadius -= 10, -270, allNumberTextBlock, 2, 30);
                 }
                 else
                 {
                     //calaculte number textblocks resizing
+                    calculateNumberAlignment(TwentyFourHrNumberRadius-=10, -270, allNumberTextBlock, 5, 15);
+
                     AlignDots(TwentyFourHrDotRadius -= 10, 15, false);
                 }
             }
@@ -210,11 +237,15 @@ namespace AnalogueClock
                 if (clockState == "twelve")
                 {
                     //calaculte number textblocks resizing
+                    calculateNumberAlignment(TweleveHrNumberRadius += 10, -270, allNumberTextBlock, 2, 30);
+
                     AlignDots(TweleveHrDotRadius += 10, 6, true);
                 }
                 else
                 {
                     //calaculte number textblocks resizing
+                    calculateNumberAlignment(TwentyFourHrNumberRadius+=10, -270, allNumberTextBlock, 5, 15);
+
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                 }
             }

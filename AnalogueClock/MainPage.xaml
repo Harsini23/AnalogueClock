@@ -47,9 +47,7 @@
             <Line x:Name="secondHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="226,225,8,81" Grid.ColumnSpan="2" UseLayoutRounding="False" d:LayoutRounding="Auto"  >
                 <Line.RenderTransform>
                         <RotateTransform x:Name="Second" CenterX="0" CenterY="0" >
-                            
                         </RotateTransform>
-                        <!--<CompositeTransform x:Name="Second" CenterX="0" CenterY="0" ScaleY="-1" Rotation="726.945"></CompositeTransform>-->
                 </Line.RenderTransform>
             </Line>
             <!--minute-->
@@ -58,7 +56,7 @@
                     <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1" ></CompositeTransform>
                 </Line.RenderTransform>
             </Line>
-
+    
             <!--hour-->
             <Line x:Name="hourHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="4" X1="80" Margin="226,225,8,81" Grid.ColumnSpan="2"  >
                 <Line.RenderTransform>
@@ -70,9 +68,7 @@
 
 
             <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" Grid.ColumnSpan="2 "></Canvas>
-
-                <Canvas Name="NumberCanvas"  Grid.ColumnSpan="2" Width="260" Height="{x:Bind NumberCanvas.Height}">
-                </Canvas>
+            <Canvas x:Name="NumberCanvas" Width="230" Height="{x:Bind NumberCanvas.Width}" Grid.ColumnSpan="2"></Canvas>
 
         </Grid>
         <Button Margin="40" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
