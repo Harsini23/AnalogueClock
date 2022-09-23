@@ -247,6 +247,23 @@ namespace AnalogueClock
             myStoryBoard.Begin();
         }
 
+        private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+        //    t_Transform.TranslateX += e.Delta.Translation.X;
+        //    t_Transform.TranslateY += e.Delta.Translation.Y;
+            
+            Debug.WriteLine(e.Delta.Translation.X.ToString());
+            
+            if (e.Delta.Translation.X > 0)
+            {
+                Increment_Click(sender, e);
+            }
+            else if (e.Delta.Translation.X < 0 )
+            {
+                Decrement_Click(sender, e);
+            }
+        }
+
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
             if (outerBlack.Width < 440)
