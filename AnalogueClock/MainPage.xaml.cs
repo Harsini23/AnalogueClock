@@ -34,7 +34,6 @@ namespace AnalogueClock
             this.InitializeComponent();
             Debug.WriteLine("Timee"+ FromSecond);
 
-
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
             List<TextBlock> NumberTextBlock = new List<TextBlock>();
@@ -95,8 +94,6 @@ namespace AnalogueClock
             innerBlack.Width = 270; innerBlack.Height = 270;
             gray.Height = 260; gray.Width = 260;
 
-
-        
             //subscribe to 12 hr tick
             timer.Tick += Timer_Tick_12;
 
@@ -138,8 +135,6 @@ namespace AnalogueClock
             Minute.Rotation = (DateTime.Now.Minute * 6) - 90;
             Hour.Rotation = (DateTime.Now.Hour * 30) + (DateTime.Now.Minute * 0.5) - 90;
         }
-
-       
 
         private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> allNumberTextBlock, int incrementSkip, int incrementAngle)
         {
@@ -247,22 +242,23 @@ namespace AnalogueClock
             myStoryBoard.Begin();
         }
 
+        //resize on mouse drag
         private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-        //    t_Transform.TranslateX += e.Delta.Translation.X;
-        //    t_Transform.TranslateY += e.Delta.Translation.Y;
             
             Debug.WriteLine(e.Delta.Translation.X.ToString());
             
-            if (e.Delta.Translation.X > 0)
+            if (e.Delta.Translation.X > 0 && (int)e.Delta.Translation.X%3==0)
             {
                 Increment_Click(sender, e);
             }
-            else if (e.Delta.Translation.X < 0 )
+            else if (e.Delta.Translation.X < 0 && (int)e.Delta.Translation.X %3 == 0)
             {
                 Decrement_Click(sender, e);
             }
         }
+
+      
 
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -307,4 +303,5 @@ namespace AnalogueClock
             }
         }
     }
+  
 }
