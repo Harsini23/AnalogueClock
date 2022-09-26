@@ -298,9 +298,10 @@ namespace AnalogueClock
         //edit clock
         private void EditTime_Click(object sender, RoutedEventArgs e)
         {
-           
+            
             if (EditTimeflag == false)
             {
+                MyScrollViewer.PointerWheelChanged += MyScrollViewer_PointerWheelChanged;
                 timer.Tick -= Timer_Tick_12;
                 timer.Tick -= Timer_Tick_24;
                 editTimeState = true;
@@ -310,6 +311,7 @@ namespace AnalogueClock
             }
             else
             {
+                MyScrollViewer.PointerWheelChanged -= MyScrollViewer_PointerWheelChanged;
                 if (clockState == "twelve")
                 {
                     timer.Tick+=Timer_Tick_12;
@@ -324,11 +326,11 @@ namespace AnalogueClock
             }
         }
 
-        private void ScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+       
+
+        private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
             int tempMinuteCount = 0;
-            var scv = (ScrollViewer)sender;
-           
 
             Minute.Rotation += 1;
            
@@ -336,11 +338,7 @@ namespace AnalogueClock
                
                 Hour.Rotation += 5;
             }
-            if ((int)Minute.Rotation % 270 == 0)
-            {
-                extraMinute += 1;
-
-            }
+          
             if((int)Minute.Rotation %6 == 0)
             {
                 extraMinute += 1;

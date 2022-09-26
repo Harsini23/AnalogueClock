@@ -35,7 +35,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <ScrollViewer PointerWheelChanged="ScrollViewer_PointerWheelChanged" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
+            <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
 
                 <Grid BorderBrush="Black" BorderThickness="2" x:Name="OverallClockContainer" Width="450" Height="450" HorizontalAlignment="Center" VerticalAlignment="Center" ManipulationMode = "TranslateX, TranslateY, Scale"  
     ManipulationDelta = "t_ManipulationDelta">
