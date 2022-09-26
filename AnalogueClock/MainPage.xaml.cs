@@ -328,7 +328,7 @@ namespace AnalogueClock
         {
             int tempMinuteCount = 0;
             var scv = (ScrollViewer)sender;
-            dummy.Text = Minute.Rotation.ToString();
+           
 
             Minute.Rotation += 1;
            
