@@ -21,9 +21,15 @@ namespace AnalogueClock
     {
         DispatcherTimer timer = new DispatcherTimer();
         public string clockState = "twelve";
+        bool editTimeState = false;
         public int TweleveHrDotRadius = 120, TwentyFourHrDotRadius = 135;
         public int TweleveHrNumberRadius = 98, TwentyFourHrNumberRadius = 120;
         public int FromSecond =-90+DateTime.Now.Second*6;
+        bool EditTimeflag = false;
+        bool TwelveHrSubscriber = false;
+        bool TwentyFourHrSubscriber = false;
+        int extraMinute = 0;
+        int extraHour = 0;
        
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
@@ -31,8 +37,9 @@ namespace AnalogueClock
 
         public MainPage()
         {
+           
             this.InitializeComponent();
-            Debug.WriteLine("Timee"+ FromSecond);
+            //Debug.WriteLine("Timee"+ FromSecond);
 
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
@@ -78,7 +85,7 @@ namespace AnalogueClock
             outerBlack.Width -= 20; outerBlack.Height -= 20;
             innerBlack.Width -= 20; innerBlack.Height -= 20;
             gray.Height -= 20; gray.Width -= 20;
-            secondHand.X1 -=10;minuteHand.X1 -= 10;hourHand.X1 -= 6;
+            secondHand.X1 -=10;minuteHand.X1 -= 10;hourHand.X1 -= 7;
             
         }
 
@@ -95,7 +102,7 @@ namespace AnalogueClock
             gray.Height = 260; gray.Width = 260;
 
             //subscribe to 12 hr tick
-            timer.Tick += Timer_Tick_12;
+            Timer_Subscribe_12Hr(TwelveHrSubscriber);
 
             //calculate position align numbers r initialangle valuenumberblock buffer -> calculateNumberAlignment
             calculateNumberAlignment(TweleveHrNumberRadius, -270, allNumberTextBlock, 2, 30);
@@ -116,7 +123,7 @@ namespace AnalogueClock
             gray.Height = 290; gray.Width = 290;
 
             //subscribe to 24tick
-            timer.Tick += Timer_Tick_24;
+            Timer_Subscribe_24Hr(TwentyFourHrSubscriber);
 
             // calculate number positions - > calculateNumberAlignment
             calculateNumberAlignment(TwentyFourHrNumberRadius, -270,allNumberTextBlock, 5, 15);
@@ -127,13 +134,33 @@ namespace AnalogueClock
         //update when the datetime changes
         private void Timer_Tick_24(object sender, object e)
         {
-            Minute.Rotation = (DateTime.Now.Minute * 6) - 90;
-            Hour.Rotation = (DateTime.Now.Hour * 15) + (DateTime.Now.Minute * 0.25) - 90;
+            Minute.Rotation = ((DateTime.Now.Minute + extraMinute) * 6) - 90;
+            Hour.Rotation = ((DateTime.Now.Hour+extraHour) * 15) + ((DateTime.Now.Minute + extraMinute) * 0.25) - 90;
         }
         private void Timer_Tick_12(object sender, object e)
         {
-            Minute.Rotation = (DateTime.Now.Minute * 6) - 90;
-            Hour.Rotation = (DateTime.Now.Hour * 30) + (DateTime.Now.Minute * 0.5) - 90;
+            Minute.Rotation = ((DateTime.Now.Minute + extraMinute) * 6) - 90;
+            Hour.Rotation = ((DateTime.Now.Hour+extraHour) * 30) + ((DateTime.Now.Minute + extraMinute) * 0.5) - 90;
+        }
+
+        private void Timer_Subscribe_12Hr(bool val)
+        {
+            if (!val)
+            {
+            timer.Tick += Timer_Tick_12;
+                TwelveHrSubscriber = true;
+
+            }
+
+        }
+        private void Timer_Subscribe_24Hr(bool val)
+        {
+            if (!val)
+            {
+                timer.Tick += Timer_Tick_24;
+                TwentyFourHrSubscriber = true;
+
+            }
         }
 
         private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> allNumberTextBlock, int incrementSkip, int incrementAngle)
@@ -246,19 +273,90 @@ namespace AnalogueClock
         private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             
-            Debug.WriteLine(e.Delta.Translation.X.ToString());
-            
-            if (e.Delta.Translation.X > 0 && (int)e.Delta.Translation.X%3==0)
+            Debug.WriteLine(e.Delta.Translation.X.ToString()+"  -------  "+ e.Delta.Translation.Y.ToString());
+
+            if ((e.Delta.Translation.X > 0 && e.Delta.Translation
+             .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
                 Increment_Click(sender, e);
             }
-            else if (e.Delta.Translation.X < 0 && (int)e.Delta.Translation.X %3 == 0)
+            else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
                 Decrement_Click(sender, e);
             }
+            else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
+            {
+                Increment_Click(sender, e);
+            }
+            else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
+            {
+                Decrement_Click(sender, e);
+            }
+
         }
 
-      
+        //edit clock
+        private void EditTime_Click(object sender, RoutedEventArgs e)
+        {
+           
+            if (EditTimeflag == false)
+            {
+                timer.Tick -= Timer_Tick_12;
+                timer.Tick -= Timer_Tick_24;
+                editTimeState = true;
+                EditTimeflag = true;
+                TwelveHrSubscriber = false; TwelveHrSubscriber = false;
+                secondHand.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                if (clockState == "twelve")
+                {
+                    timer.Tick+=Timer_Tick_12;
+                }
+                else
+                {
+                    timer.Tick-=Timer_Tick_24;
+                }
+                editTimeState = false;
+                EditTimeflag = false;
+                secondHand.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            int tempMinuteCount = 0;
+            var scv = (ScrollViewer)sender;
+            dummy.Text = Minute.Rotation.ToString();
+
+            Minute.Rotation += 1;
+           
+            if (((int)Minute.Rotation) %60==0 && clockState=="twelve") {
+               
+                Hour.Rotation += 5;
+            }
+            if ((int)Minute.Rotation % 270 == 0)
+            {
+                extraMinute += 1;
+
+            }
+            if((int)Minute.Rotation %6 == 0)
+            {
+                extraMinute += 1;
+                tempMinuteCount += 1;
+            }
+            if (tempMinuteCount == 60)
+            {
+                extraHour += 1;
+            }
+           
+            if(((int)Minute.Rotation) %180==0 && clockState == "twentyfour")
+            {
+                Hour.Rotation += 7.5;
+            }
+           
+        }
 
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -269,37 +367,40 @@ namespace AnalogueClock
                 {
                     //calaculte number textblocks resizing
                     calculateNumberAlignment(TweleveHrNumberRadius += 10, -270, allNumberTextBlock, 2, 30);
-
                     AlignDots(TweleveHrDotRadius += 10, 6, true);
                 }
                 else
                 {
                     //calaculte number textblocks resizing
                     calculateNumberAlignment(TwentyFourHrNumberRadius+=10, -270, allNumberTextBlock, 5, 15);
-
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                 }
             }
         }
         private void Change_Click(object sender, RoutedEventArgs e)
         {
-            if (clockState == "twelve")
+            if (editTimeState == false)
             {
-                clockState = "twentyfour";
-                this.TwentyFourHrNumberRadius = 120;
-                this.TwentyFourHrDotRadius = 135;
-                ResetHandSize();
-                TwentyFourHrClock();
-
-            }
-            else
-            {
-                clockState = "twelve";
-                this.TweleveHrNumberRadius = 98;
-                this.TweleveHrDotRadius = 120;
-                ResetHandSize();
-                TwelveHrClock();
-
+                if (clockState == "twelve")
+                {
+                    timer.Tick -= Timer_Tick_12;
+                    TwelveHrSubscriber = false;
+                    clockState = "twentyfour";
+                    this.TwentyFourHrNumberRadius = 120;
+                    this.TwentyFourHrDotRadius = 135;
+                    ResetHandSize();
+                    TwentyFourHrClock();
+                }
+                else
+                {
+                    timer.Tick -= Timer_Tick_24;
+                    TwentyFourHrSubscriber = false;
+                    clockState = "twelve";
+                    this.TweleveHrNumberRadius = 98;
+                    this.TweleveHrDotRadius = 120;
+                    ResetHandSize();
+                    TwelveHrClock();
+                }
             }
         }
     }
