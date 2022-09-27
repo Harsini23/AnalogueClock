@@ -73,7 +73,6 @@
                             </TransformGroup>
                         </Line.RenderTransform>
                     </Line>
-
                     <Canvas x:Name="NumberCanvas" Width="230" Height="{x:Bind NumberCanvas.Width}"  ></Canvas>
                     <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" ></Canvas>
 
