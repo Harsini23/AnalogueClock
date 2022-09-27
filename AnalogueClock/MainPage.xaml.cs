@@ -26,6 +26,8 @@ namespace AnalogueClock
         public int TweleveHrDotRadius = 120, TwentyFourHrDotRadius = 135;
         public int TweleveHrNumberRadius = 98, TwentyFourHrNumberRadius = 120;
         public int FromSecond =-90+DateTime.Now.Second*6;
+        public int ToSecond = 360+(-90 + DateTime.Now.Second * 6) ;
+
         bool EditTimeflag = false;
         bool TwelveHrSubscriber = false;
         bool TwentyFourHrSubscriber = false;
@@ -40,7 +42,7 @@ namespace AnalogueClock
         {
            
             this.InitializeComponent();
-            //Debug.WriteLine("Timee"+ FromSecond);
+            Debug.WriteLine("Timee- "+ FromSecond +" actual second: "+ DateTime.Now.Second);
 
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
@@ -55,7 +57,6 @@ namespace AnalogueClock
             NumberTextBlock.Reverse();
 
             allNumberTextBlock = NumberTextBlock;
-
 
             //set dots representing minutes 
             for (int i = 0; i < 60; i++)
@@ -326,7 +327,7 @@ namespace AnalogueClock
         }
 
        
-
+        //on mouse wheel scroll activation
         private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
             PointerPoint CurrentPoint = e.GetCurrentPoint(OverallClockContainer);
@@ -341,7 +342,6 @@ namespace AnalogueClock
 
                 if (((int)Minute.Rotation) % 60 == 0 && clockState == "twelve")
                 {
-
                     Hour.Rotation += 5;
                 }
 
@@ -368,7 +368,6 @@ namespace AnalogueClock
 
                 if (((int)Minute.Rotation) % 60 == 0 && clockState == "twelve")
                 {
-
                     Hour.Rotation -= 5;
                 }
 
@@ -392,6 +391,7 @@ namespace AnalogueClock
            
         }
 
+        //increment clock size
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
             if (outerBlack.Width < 440)
@@ -411,6 +411,8 @@ namespace AnalogueClock
                 }
             }
         }
+
+        //change clock between 12 and 24 hr
         private void Change_Click(object sender, RoutedEventArgs e)
         {
             if (editTimeState == false)
