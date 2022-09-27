@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -149,9 +150,7 @@ namespace AnalogueClock
             {
             timer.Tick += Timer_Tick_12;
                 TwelveHrSubscriber = true;
-
             }
-
         }
         private void Timer_Subscribe_24Hr(bool val)
         {
@@ -330,29 +329,66 @@ namespace AnalogueClock
 
         private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
-            int tempMinuteCount = 0;
+            PointerPoint CurrentPoint = e.GetCurrentPoint(OverallClockContainer);
+            var value = CurrentPoint.Properties.MouseWheelDelta;
+            Debug.WriteLine("pointer: "+CurrentPoint);
+            Debug.WriteLine("value :  "+value);
+           
+            if(value < 0)
+            {
+                int tempMinuteCount = 0;
+                Minute.Rotation += 1;
 
-            Minute.Rotation += 1;
-           
-            if (((int)Minute.Rotation) %60==0 && clockState=="twelve") {
-               
-                Hour.Rotation += 5;
+                if (((int)Minute.Rotation) % 60 == 0 && clockState == "twelve")
+                {
+
+                    Hour.Rotation += 5;
+                }
+
+                if ((int)Minute.Rotation % 6 == 0)
+                {
+                    extraMinute += 1;
+                    tempMinuteCount += 1;
+                }
+                if (tempMinuteCount == 60)
+                {
+                    extraHour += 1;
+                }
+
+                if (((int)Minute.Rotation) % 180 == 0 && clockState == "twentyfour")
+                {
+                    Hour.Rotation += 7.5;
+                }
             }
-          
-            if((int)Minute.Rotation %6 == 0)
+            else
             {
-                extraMinute += 1;
-                tempMinuteCount += 1;
+
+                int tempMinuteCount = 0;
+                Minute.Rotation -= 1;
+
+                if (((int)Minute.Rotation) % 60 == 0 && clockState == "twelve")
+                {
+
+                    Hour.Rotation -= 5;
+                }
+
+                if ((int)Minute.Rotation % 6 == 0)
+                {
+                    extraMinute -= 1;
+                    tempMinuteCount -= 1;
+                }
+                if (tempMinuteCount == 60)
+                {
+                    extraHour -= 1;
+                }
+
+                if (((int)Minute.Rotation) % 180 == 0 && clockState == "twentyfour")
+                {
+                    Hour.Rotation -= 7.5;
+                }
+
             }
-            if (tempMinuteCount == 60)
-            {
-                extraHour += 1;
-            }
-           
-            if(((int)Minute.Rotation) %180==0 && clockState == "twentyfour")
-            {
-                Hour.Rotation += 7.5;
-            }
+       
            
         }
 

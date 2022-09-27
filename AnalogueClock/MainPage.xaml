@@ -9,7 +9,6 @@
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-
         <Style TargetType="TextBlock" x:Key="twelveHrFont">
             <Setter Property="FontSize" Value="22"></Setter>
             <Setter Property="FontFamily" Value="XamlAutoFontFamily"></Setter>
