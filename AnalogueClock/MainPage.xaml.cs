@@ -36,7 +36,7 @@ namespace AnalogueClock
         double TotalScreenWidth ;
         double TotalScreenHeight ;
 
-
+        Windows.UI.Core.CoreCursorType CustomCursorDirectionValue= Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
         //public int actualButtonWidth=20;
 
@@ -293,24 +293,32 @@ namespace AnalogueClock
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
+                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
+
                 if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
                     Increment_Click(sender, e);
                 else Decrement_Click(sender, e);
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
+                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
+
                 if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
                     Decrement_Click(sender, e);
                 else Increment_Click(sender, e);
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
+                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
+
                 if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
                     Decrement_Click(sender, e);
                 else Increment_Click(sender, e);
             }
             else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
+                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
+
                 if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
                     Increment_Click(sender, e);
                 else Decrement_Click(sender, e);
@@ -412,18 +420,18 @@ namespace AnalogueClock
         private void MyScrollViewer_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
 
-            Windows.UI.Core.CoreCursorType CustomCursorDirectionValue ;
+         
 
-            if (e.GetCurrentPoint(OverallClockContainer).Position.X< e.GetCurrentPoint(OverallClockContainer).Position.Y)
-            {
-                 CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
-                //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.X);
-                //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.Y);
-            }
-            else
-            {
-                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
-            }
+            //if (e.GetCurrentPoint(OverallClockContainer).Position.X< e.GetCurrentPoint(OverallClockContainer).Position.Y)
+            //{
+            //     CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
+            //    //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.X);
+            //    //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.Y);
+            //}
+            //else
+            //{
+            //    CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
+            //}
            
           
             //Debug.WriteLine("pointer position "+Window.Current.CoreWindow.PointerPosition);
