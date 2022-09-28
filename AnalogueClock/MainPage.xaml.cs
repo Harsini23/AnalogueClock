@@ -25,24 +25,30 @@ namespace AnalogueClock
         bool editTimeState = false;
         public int TweleveHrDotRadius = 120, TwentyFourHrDotRadius = 135;
         public int TweleveHrNumberRadius = 103, TwentyFourHrNumberRadius = 120;
-        public int FromSecond =-90+DateTime.Now.Second*6;
-        public int ToSecond = 360+(-90 + DateTime.Now.Second * 6);
+        public int FromSecond = -90 + DateTime.Now.Second * 6;
+        public int ToSecond = 360 + (-90 + DateTime.Now.Second * 6);
 
         bool EditTimeflag = false;
         bool TwelveHrSubscriber = false;
         bool TwentyFourHrSubscriber = false;
         int extraMinute = 0;
         int extraHour = 0;
-       
+        double TotalScreenWidth ;
+        double TotalScreenHeight ;
+
+
+
+        //public int actualButtonWidth=20;
+
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         List<TextBlock> allNumberTextBlock = new List<TextBlock>();
 
         public MainPage()
         {
-           
+
             this.InitializeComponent();
-            Debug.WriteLine("Timee- "+ FromSecond +" actual second: "+ DateTime.Now.Second);
+            Debug.WriteLine("Timee- " + FromSecond + " actual second: " + DateTime.Now.Second);
 
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
@@ -50,7 +56,7 @@ namespace AnalogueClock
             for (int i = 0; i < 24; i++)
             {
                 TextBlock t = new TextBlock();
-                t.Text= (i+1).ToString();
+                t.Text = (i + 1).ToString();
                 NumberCanvas.Children.Add(t);
                 NumberTextBlock.Add(t);
             }
@@ -71,6 +77,9 @@ namespace AnalogueClock
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
             TwelveHrClock();
+
+          
+
         }
 
         //increase size
@@ -79,7 +88,7 @@ namespace AnalogueClock
             outerBlack.Width += 20; outerBlack.Height += 20;
             innerBlack.Width += 20; innerBlack.Height += 20;
             gray.Height += 20; gray.Width += 20;
-            secondHand.X1 += 10;minuteHand.X1 += 10;hourHand.X1 += 7;
+            secondHand.X1 += 10; minuteHand.X1 += 10; hourHand.X1 += 7;
         }
 
         public void DecreaseClockSize()
@@ -87,11 +96,11 @@ namespace AnalogueClock
             outerBlack.Width -= 20; outerBlack.Height -= 20;
             innerBlack.Width -= 20; innerBlack.Height -= 20;
             gray.Height -= 20; gray.Width -= 20;
-            secondHand.X1 -=10;minuteHand.X1 -= 10;hourHand.X1 -= 7;
-            
+            secondHand.X1 -= 10; minuteHand.X1 -= 10; hourHand.X1 -= 7;
+
         }
 
-     
+
 
         //set for 12 hr format
         public void TwelveHrClock()
@@ -107,7 +116,7 @@ namespace AnalogueClock
             Timer_Subscribe_12Hr(TwelveHrSubscriber);
 
             //calculate position align numbers r initialangle valuenumberblock buffer -> calculateNumberAlignment
-            calculateNumberAlignment(TweleveHrNumberRadius, -270, allNumberTextBlock,  30);
+            calculateNumberAlignment(TweleveHrNumberRadius, -270, allNumberTextBlock, 30);
             //align dots
             AlignDots(TweleveHrDotRadius, 6, true);
 
@@ -128,7 +137,7 @@ namespace AnalogueClock
             Timer_Subscribe_24Hr(TwentyFourHrSubscriber);
 
             // calculate number positions - > calculateNumberAlignment
-            calculateNumberAlignment(TwentyFourHrNumberRadius, -270,allNumberTextBlock, 15);
+            calculateNumberAlignment(TwentyFourHrNumberRadius, -270, allNumberTextBlock, 15);
             //calculate dot positions
             AlignDots(TwentyFourHrDotRadius, 15, false);
         }
@@ -137,19 +146,19 @@ namespace AnalogueClock
         private void Timer_Tick_24(object sender, object e)
         {
             Minute.Rotation = ((DateTime.Now.Minute + extraMinute) * 6) - 90;
-            Hour.Rotation = ((DateTime.Now.Hour+extraHour) * 15) + ((DateTime.Now.Minute + extraMinute) * 0.25) - 90;
+            Hour.Rotation = ((DateTime.Now.Hour + extraHour) * 15) + ((DateTime.Now.Minute + extraMinute) * 0.25) - 90;
         }
         private void Timer_Tick_12(object sender, object e)
         {
             Minute.Rotation = ((DateTime.Now.Minute + extraMinute) * 6) - 90;
-            Hour.Rotation = ((DateTime.Now.Hour+extraHour) * 30) + ((DateTime.Now.Minute + extraMinute) * 0.5) - 90;
+            Hour.Rotation = ((DateTime.Now.Hour + extraHour) * 30) + ((DateTime.Now.Minute + extraMinute) * 0.5) - 90;
         }
 
         private void Timer_Subscribe_12Hr(bool val)
         {
             if (!val)
             {
-            timer.Tick += Timer_Tick_12;
+                timer.Tick += Timer_Tick_12;
                 TwelveHrSubscriber = true;
             }
         }
@@ -165,11 +174,11 @@ namespace AnalogueClock
 
         private void calculateNumberAlignment(int r, int initialangle, List<TextBlock> allNumberTextBlock, int incrementAngle)
         {
-           
+
             double x1, y1;
             int inccount = 0;
-            bool flag=false;
-            if(incrementAngle==30) flag= true;
+            bool flag = false;
+            if (incrementAngle == 30) flag = true;
 
             if (r < 90 && flag == false)
             {
@@ -179,7 +188,7 @@ namespace AnalogueClock
                     i.Style = s;
                 }
             }
-            else 
+            else
             {
                 Style s = (Style)Resources["twelveHrFont"];
                 foreach (var i in allNumberTextBlock)
@@ -200,13 +209,13 @@ namespace AnalogueClock
                 {
                     i.Visibility = Visibility.Visible;
                 }
-               
+
                 x1 = 112 + r * Math.Cos(Math.PI * initialangle / 180.0) - 10;
                 y1 = 108 - r * Math.Sin(Math.PI * initialangle / 180.0) - 10;
                 i.SetValue(Canvas.LeftProperty, x1);
                 i.SetValue(Canvas.TopProperty, y1);
                 initialangle += incrementAngle;
-              
+
             }
 
         }
@@ -240,24 +249,24 @@ namespace AnalogueClock
         //reset hand size
         private void ResetHandSize()
         {
-            secondHand.X1 = 115; minuteHand.X1 = 105;hourHand.X1 = 70;
+            secondHand.X1 = 115; minuteHand.X1 = 105; hourHand.X1 = 70;
         }
 
         private void Decrement_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width > 250 || ( outerBlack.Width>220 && clockState=="twelve"))
+            if (outerBlack.Width > 250 || (outerBlack.Width > 220 && clockState == "twelve"))
             {
                 DecreaseClockSize();
                 if (clockState == "twelve")
                 {
                     //calaculte number textblocks resizing
                     AlignDots(TweleveHrDotRadius -= 10, 6, true);
-                    calculateNumberAlignment(TweleveHrNumberRadius -= 10, -270, allNumberTextBlock,  30);
+                    calculateNumberAlignment(TweleveHrNumberRadius -= 10, -270, allNumberTextBlock, 30);
                 }
                 else
                 {
                     //calaculte number textblocks resizing
-                    calculateNumberAlignment(TwentyFourHrNumberRadius-=10, -270, allNumberTextBlock, 15);
+                    calculateNumberAlignment(TwentyFourHrNumberRadius -= 10, -270, allNumberTextBlock, 15);
 
                     AlignDots(TwentyFourHrDotRadius -= 10, 15, false);
                 }
@@ -272,25 +281,39 @@ namespace AnalogueClock
         //resize on mouse drag
         private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            
-            Debug.WriteLine(e.Delta.Translation.X.ToString()+"  -------  "+ e.Delta.Translation.Y.ToString());
+            TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
+            TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
+
+            Debug.WriteLine(e.Delta.Translation.X.ToString() + "  -------  " + e.Delta.Translation.Y.ToString());
+            var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
+            var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
+
+            Debug.WriteLine("X: "+Window.Current.CoreWindow.PointerPosition.X.ToString()+" Y: "+Window.Current.CoreWindow.PointerPosition.Y.ToString()+" "+TotalScreenHeight+" "+TotalScreenWidth);
 
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                Increment_Click(sender, e);
+                if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
+                    Increment_Click(sender, e);
+                else Decrement_Click(sender, e);
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                Decrement_Click(sender, e);
+                if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
+                    Decrement_Click(sender, e);
+                else Increment_Click(sender, e);
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                Increment_Click(sender, e);
+                if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
+                    Decrement_Click(sender, e);
+                else Increment_Click(sender, e);
             }
             else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                Decrement_Click(sender, e);
+                if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
+                    Increment_Click(sender, e);
+                else Decrement_Click(sender, e);
             }
 
         }
@@ -298,7 +321,7 @@ namespace AnalogueClock
         //edit clock
         private void EditTime_Click(object sender, RoutedEventArgs e)
         {
-            
+
             if (EditTimeflag == false)
             {
                 MyScrollViewer.PointerWheelChanged += MyScrollViewer_PointerWheelChanged;
@@ -314,11 +337,11 @@ namespace AnalogueClock
                 MyScrollViewer.PointerWheelChanged -= MyScrollViewer_PointerWheelChanged;
                 if (clockState == "twelve")
                 {
-                    timer.Tick+=Timer_Tick_12;
+                    timer.Tick += Timer_Tick_12;
                 }
                 else
                 {
-                    timer.Tick-=Timer_Tick_24;
+                    timer.Tick -= Timer_Tick_24;
                 }
                 editTimeState = false;
                 EditTimeflag = false;
@@ -326,16 +349,16 @@ namespace AnalogueClock
             }
         }
 
-       
+
         //on mouse wheel scroll activation
         private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
             PointerPoint CurrentPoint = e.GetCurrentPoint(OverallClockContainer);
             var value = CurrentPoint.Properties.MouseWheelDelta;
-            Debug.WriteLine("pointer: "+CurrentPoint);
-            Debug.WriteLine("value :  "+value);
-           
-            if(value < 0)
+         // Debug.WriteLine("pointer: " + CurrentPoint);
+           // Debug.WriteLine("value :  " + value);
+
+            if (value < 0)
             {
                 int tempMinuteCount = 0;
                 Minute.Rotation += 1;
@@ -354,7 +377,6 @@ namespace AnalogueClock
                 {
                     extraHour += 1;
                 }
-
                 if (((int)Minute.Rotation) % 180 == 0 && clockState == "twentyfour")
                 {
                     Hour.Rotation += 7.5;
@@ -362,7 +384,6 @@ namespace AnalogueClock
             }
             else
             {
-
                 int tempMinuteCount = 0;
                 Minute.Rotation -= 1;
 
@@ -385,11 +406,56 @@ namespace AnalogueClock
                 {
                     Hour.Rotation -= 7.5;
                 }
-
             }
-       
-           
         }
+
+        private void MyScrollViewer_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+
+            Windows.UI.Core.CoreCursorType CustomCursorDirectionValue ;
+
+            if (e.GetCurrentPoint(OverallClockContainer).Position.X< e.GetCurrentPoint(OverallClockContainer).Position.Y)
+            {
+                 CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
+                //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.X);
+                //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.Y);
+            }
+            else
+            {
+                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
+            }
+           
+          
+            //Debug.WriteLine("pointer position "+Window.Current.CoreWindow.PointerPosition);
+            Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(CustomCursorDirectionValue, 1);
+        }
+
+        private void MyScrollViewer_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 1);
+        }
+
+        private void OverallClockContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //
+        }
+
+        //private void TextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+           
+        //    Debug.WriteLine("Textblock size changed: "+ e.PreviousSize + " " + e.NewSize);
+            
+          
+        //}
+
+        //private void incbuttonsize_Click(object sender, RoutedEventArgs e)
+        //{
+        //    dummy.Width += 10;
+        //    dummy.Height += 10;
+        //    Debug.WriteLine("Inc done");
+        //}
+
+      
 
         //increment clock size
         private void Increment_Click(object sender, RoutedEventArgs e)
@@ -406,7 +472,7 @@ namespace AnalogueClock
                 else
                 {
                     //calaculte number textblocks resizing
-                    calculateNumberAlignment(TwentyFourHrNumberRadius+=10, -270, allNumberTextBlock,  15);
+                    calculateNumberAlignment(TwentyFourHrNumberRadius += 10, -270, allNumberTextBlock, 15);
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                 }
             }
@@ -440,5 +506,5 @@ namespace AnalogueClock
             }
         }
     }
-  
+
 }

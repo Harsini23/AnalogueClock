@@ -9,6 +9,7 @@
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
+
         <Style TargetType="TextBlock" x:Key="twelveHrFont">
             <Setter Property="FontSize" Value="22"></Setter>
             <Setter Property="FontFamily" Value="XamlAutoFontFamily"></Setter>
@@ -19,75 +20,75 @@
         <Style TargetType="TextBlock" x:Key="twentyfourHrFontSmall">
             <Setter Property="FontSize" Value="16"></Setter>
         </Style>
-        
-        
+
+
         <Storyboard x:Name="myStoryBoard">
             <DoubleAnimation Storyboard.TargetName="Second" Storyboard.TargetProperty="Angle" From="{x:Bind FromSecond}" To="{x:Bind ToSecond}" Duration="0:1:0" AutoReverse="False" RepeatBehavior="Forever">
             </DoubleAnimation>
         </Storyboard>
-        
+
     </Page.Resources>
-    
-   
-    <Grid>
 
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center"  >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="450"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center"  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="450"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <!--<RowDefinition Height="*"></RowDefinition>-->
+        </Grid.RowDefinitions>
+        <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled" >
 
-                <Grid BorderBrush="Black" BorderThickness="2" x:Name="OverallClockContainer" Width="450" Height="450" HorizontalAlignment="Center" VerticalAlignment="Center" ManipulationMode = "TranslateX, TranslateY, Scale"  
-    ManipulationDelta = "t_ManipulationDelta">
-
-
-                    <Ellipse x:Name="outerBlack" Width="280" Height="{x:Bind outerBlack.Width}" StrokeThickness="20" Stroke="Black" Fill="LightGray"></Ellipse>
-                    <Ellipse x:Name="innerBlack" Width="270" Height="{x:Bind innerBlack.Width}" StrokeThickness="20" Stroke="Black"  Fill="LightGray"></Ellipse>
-                    <Ellipse x:Name="gray" Width="260" Height="{x:Bind gray.Width}" StrokeThickness="5" Stroke="Gray" Fill="LightGray"></Ellipse>
-
-                    <Ellipse Fill="OliveDrab" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <Ellipse Fill="Black" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+            <Grid BorderBrush="Black" BorderThickness="2" x:Name="OverallClockContainer" Width="450" Height="450" HorizontalAlignment="Center" VerticalAlignment="Center"  
+     SizeChanged="OverallClockContainer_SizeChanged" 
+                  ManipulationMode = "TranslateX, TranslateY, Scale"  
+    ManipulationDelta = "t_ManipulationDelta"
+                  PointerEntered="MyScrollViewer_PointerEntered" PointerExited="MyScrollViewer_PointerExited">
 
 
-                    <!--second-->
-                    <Line x:Name="secondHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="226,225,8,81"   UseLayoutRounding="False" d:LayoutRounding="Auto"  >
-                        <Line.RenderTransform>
-                            <RotateTransform x:Name="Second" CenterX="0" CenterY="0" >
-                            </RotateTransform>
-                        </Line.RenderTransform>
-                    </Line>
-                    <!--minute-->
-                    <Line x:Name="minuteHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="2" X1="105" Margin="226,225,8,81"    >
-                        <Line.RenderTransform>
-                            <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1" ></CompositeTransform>
-                        </Line.RenderTransform>
-                    </Line>
+                <Ellipse x:Name="outerBlack" Width="280" Height="{x:Bind outerBlack.Width}" StrokeThickness="20" Stroke="Black" Fill="LightGray"></Ellipse>
+                <Ellipse x:Name="innerBlack" Width="270" Height="{x:Bind innerBlack.Width}" StrokeThickness="20" Stroke="Black"  Fill="LightGray"></Ellipse>
+                <Ellipse x:Name="gray" Width="260" Height="{x:Bind gray.Width}" StrokeThickness="5" Stroke="Gray" Fill="LightGray"></Ellipse>
 
-                    <!--hour-->
-                    <Line x:Name="hourHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="4" X1="80" Margin="226,225,8,81"    >
-                        <Line.RenderTransform>
-                            <TransformGroup>
-                                <CompositeTransform x:Name="Hour" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
-                            </TransformGroup>
-                        </Line.RenderTransform>
-                    </Line>
-                    <Canvas x:Name="NumberCanvas" Width="230" Height="{x:Bind NumberCanvas.Width}"  ></Canvas>
-                    <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" ></Canvas>
-
-                </Grid>
-            </ScrollViewer>
+                <Ellipse Fill="OliveDrab" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Ellipse Fill="Black" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center"  />
 
 
-            <Button Margin="10" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
+                <!--second-->
+                <Line x:Name="secondHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle"  Stroke="Black" StrokeThickness="1" X1="115" Margin="226,225,8,81"   UseLayoutRounding="False" d:LayoutRounding="Auto"  >
+                    <Line.RenderTransform>
+                        <RotateTransform x:Name="Second" CenterX="0" CenterY="0" >
+                        </RotateTransform>
+                    </Line.RenderTransform>
+                </Line>
+                <!--minute-->
+                <Line x:Name="minuteHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="2" X1="105" Margin="226,225,8,81"    >
+                    <Line.RenderTransform>
+                        <CompositeTransform x:Name="Minute" CenterX="0" CenterY="0"  ScaleY="-1" ></CompositeTransform>
+                    </Line.RenderTransform>
+                </Line>
 
-            <Button Grid.Row="2" Content="Increment" x:Name="Inc" Click="Increment_Click"></Button>
-            <Button  HorizontalAlignment="Right" Grid.Row="2" Content="Decrement" x:Name="Dec" Click="Decrement_Click"></Button>
-            <Button HorizontalAlignment="Center" Grid.Row="2" x:Name="EditTime" Content="Edit time" Click="EditTime_Click" ></Button>
-          
+                <!--hour-->
+                <Line x:Name="hourHand" StrokeEndLineCap="Square" StrokeStartLineCap="Triangle" Stroke="Black" StrokeThickness="4" X1="80" Margin="226,225,8,81"    >
+                    <Line.RenderTransform>
+                        <TransformGroup>
+                            <CompositeTransform x:Name="Hour" CenterX="0" CenterY="0" ScaleY="-1"></CompositeTransform>
+                        </TransformGroup>
+                    </Line.RenderTransform>
+                </Line>
+                <Canvas x:Name="NumberCanvas" Width="230" Height="{x:Bind NumberCanvas.Width}"  ></Canvas>
+                <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" ></Canvas>
 
-        </Grid>
+            </Grid>
+        </ScrollViewer>
+
+
+        <Button Margin="10" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
+
+        <Button Grid.Row="2" Content="Increment" x:Name="Inc" Click="Increment_Click"></Button>
+        <Button  HorizontalAlignment="Right" Grid.Row="2" Content="Decrement" x:Name="Dec" Click="Decrement_Click"></Button>
+        <Button HorizontalAlignment="Center" Grid.Row="2" x:Name="EditTime" Content="Edit time" Click="EditTime_Click" ></Button>
+
+        <!--<Rectangle Fill="Black"  Width="20" Height="20" x:Name="dummy" Grid.Row="3" SizeChanged="TextBlock_SizeChanged" HorizontalAlignment="Right"  ></Rectangle >
+        <Button  Width="100" Height="5" HorizontalAlignment="Left" Content="inc size" Margin="5" Grid.Row="3" x:Name="incbuttonsize" Click="incbuttonsize_Click" ></Button>-->
     </Grid>
-
 </Page>
