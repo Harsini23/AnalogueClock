@@ -35,8 +35,9 @@ namespace AnalogueClock
         int extraHour = 0;
         double TotalScreenWidth ;
         double TotalScreenHeight ;
+        int myCentreForLine;
 
-       
+
         //public int actualButtonWidth=20;
 
 
@@ -47,8 +48,7 @@ namespace AnalogueClock
         {
 
             this.InitializeComponent();
-           // Debug.WriteLine("Timee- " + FromSecond + " actual second: " + DateTime.Now.Second);
-
+           
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
             List<TextBlock> NumberTextBlock = new List<TextBlock>();
@@ -77,8 +77,7 @@ namespace AnalogueClock
             timer.Start();
             TwelveHrClock();
 
-          
-
+            myCentreForLine = (int)((Frame)Window.Current.Content).ActualWidth / 2;
         }
 
         //increase size
@@ -139,6 +138,7 @@ namespace AnalogueClock
             calculateNumberAlignment(TwentyFourHrNumberRadius, -270, allNumberTextBlock, 15);
             //calculate dot positions
             AlignDots(TwentyFourHrDotRadius, 15, false);
+          
         }
 
         //update when the datetime changes
@@ -253,7 +253,7 @@ namespace AnalogueClock
 
         private void Decrement_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width > 250 || (outerBlack.Width > 220 && clockState == "twelve"))
+            if (outerBlack.Width > 250 || (outerBlack.Width > 250 && clockState == "twelve"))
             {
                 DecreaseClockSize();
                 if (clockState == "twelve")
@@ -280,14 +280,18 @@ namespace AnalogueClock
         //resize on mouse drag
         private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
+            var WidthExpansion =(int)  AppContainer.RowDefinitions[0].ActualHeight;
+            secondHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
+            minuteHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
+            hourHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
+
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
-
-          //  Debug.WriteLine(e.Delta.Translation.X.ToString() + "  -------  " + e.Delta.Translation.Y.ToString());
+         
             var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
 
-           // Debug.WriteLine("X: "+Window.Current.CoreWindow.PointerPosition.X.ToString()+" Y: "+Window.Current.CoreWindow.PointerPosition.Y.ToString()+" "+TotalScreenHeight+" "+TotalScreenWidth);
+         
 
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
@@ -327,7 +331,7 @@ namespace AnalogueClock
 
             if (EditTimeflag == false)
             {
-                MyScrollViewer.PointerWheelChanged += MyScrollViewer_PointerWheelChanged;
+                OverallClockContainer.PointerWheelChanged += MyScrollViewer_PointerWheelChanged;
                 timer.Tick -= Timer_Tick_12;
                 timer.Tick -= Timer_Tick_24;
                 editTimeState = true;
@@ -337,7 +341,7 @@ namespace AnalogueClock
             }
             else
             {
-                MyScrollViewer.PointerWheelChanged -= MyScrollViewer_PointerWheelChanged;
+                OverallClockContainer.PointerWheelChanged -= MyScrollViewer_PointerWheelChanged;
                 if (clockState == "twelve")
                 {
                     timer.Tick += Timer_Tick_12;
@@ -352,14 +356,11 @@ namespace AnalogueClock
             }
         }
 
-
         //on mouse wheel scroll activation
         private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
             PointerPoint CurrentPoint = e.GetCurrentPoint(OverallClockContainer);
             var value = CurrentPoint.Properties.MouseWheelDelta;
-         // Debug.WriteLine("pointer: " + CurrentPoint);
-           // Debug.WriteLine("value :  " + value);
 
             if (value < 0)
             {
@@ -412,7 +413,7 @@ namespace AnalogueClock
             }
         }
 
-        private void MyScrollViewer_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void Overall_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
@@ -433,62 +434,72 @@ namespace AnalogueClock
             Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(CursorDirectionValue, 1);
         }
 
-        private void MyScrollViewer_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void Overall_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 1);
         }
 
         private void OverallContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double windowSize =e.NewSize.Height;
-            Debug.WriteLine("Value " + (windowSize - TweleveHrNumberRadius));
-            if (windowSize < 550)
+            // do for 24 hr clock
+            var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight;
+            secondHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
+            minuteHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
+            hourHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
+
+            double windowSizeHeight =e.NewSize.Height;
+            double windowSizeWidth =e.NewSize.Width;
+
+            Debug.WriteLine(windowSizeHeight);
+            Debug.WriteLine(TweleveHrNumberRadius);
+         
+            if (windowSizeHeight < 580 )
             {
-                while (windowSize-TweleveHrNumberRadius<230)
+                while (windowSizeHeight < TweleveHrNumberRadius*2 + 140 )
                 {
-                    Decrement_Click(sender,new RoutedEventArgs());
+                    Decrement_Click(sender, new RoutedEventArgs());
+                }
+            }
+            if(windowSizeWidth < 700)
+            {
+                while(windowSizeWidth< TweleveHrNumberRadius*2 + 140)
+                {
+                    Decrement_Click(sender, new RoutedEventArgs());
                 }
             }
 
-            Debug.WriteLine("Clock size outer height:"+ outerBlack.Height+" 12hr radius:"+TweleveHrNumberRadius);
-            Debug.WriteLine("Size changed: " + e.PreviousSize + " " + e.NewSize);
+
+         
         }
-
-        //private void TextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-           
-        //    Debug.WriteLine("Textblock size changed: "+ e.PreviousSize + " " + e.NewSize);
-            
-          
-        //}
-
-        //private void incbuttonsize_Click(object sender, RoutedEventArgs e)
-        //{
-        //    dummy.Width += 10;
-        //    dummy.Height += 10;
-        //    Debug.WriteLine("Inc done");
-        //}
-
-      
 
         //increment clock size
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width < 440)
+            if (outerBlack.Width < 580 )
             {
-                IncreaseClockSize();
-                if (clockState == "twelve")
+                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth +" "+( TweleveHrNumberRadius * 2 + 200));
+                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
+
+                if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 200 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 200)
                 {
-                    //calaculte number textblocks resizing
-                    calculateNumberAlignment(TweleveHrNumberRadius += 10, -270, allNumberTextBlock, 30);
-                    AlignDots(TweleveHrDotRadius += 10, 6, true);
+                    if (clockState == "twelve")
+                    {
+                        //calaculte number textblocks resizing
+                        calculateNumberAlignment(TweleveHrNumberRadius += 10, -270, allNumberTextBlock, 30);
+                        AlignDots(TweleveHrDotRadius += 10, 6, true);
+                        IncreaseClockSize();
+                    }
                 }
-                else
+                
+               if((int)((Frame)Window.Current.Content).ActualWidth >= TwentyFourHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TwentyFourHrNumberRadius * 2 + 140)
+                if(clockState=="twentyfour")
                 {
                     //calaculte number textblocks resizing
                     calculateNumberAlignment(TwentyFourHrNumberRadius += 10, -270, allNumberTextBlock, 15);
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
-                }
+                        IncreaseClockSize();
+                    }
+               
             }
         }
 
@@ -506,6 +517,10 @@ namespace AnalogueClock
                     this.TwentyFourHrDotRadius = 135;
                     ResetHandSize();
                     TwentyFourHrClock();
+                  
+                    secondHand.Margin = new Thickness(157, 0, 0, 0);
+                    minuteHand.Margin = new Thickness(157, 0, 0, 0);
+                    hourHand.Margin = new Thickness(157 , 0, 0, 0);
                 }
                 else
                 {
@@ -516,6 +531,9 @@ namespace AnalogueClock
                     this.TweleveHrDotRadius = 120;
                     ResetHandSize();
                     TwelveHrClock();
+                    secondHand.Margin = new Thickness(142, 0, 0, 0);
+                    minuteHand.Margin = new Thickness(142, 0, 0, 0);
+                    hourHand.Margin = new Thickness(142, 0, 0, 0);
                 }
             }
         }
