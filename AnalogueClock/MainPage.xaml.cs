@@ -36,8 +36,7 @@ namespace AnalogueClock
         double TotalScreenWidth ;
         double TotalScreenHeight ;
 
-        Windows.UI.Core.CoreCursorType CustomCursorDirectionValue= Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
-
+       
         //public int actualButtonWidth=20;
 
 
@@ -48,7 +47,7 @@ namespace AnalogueClock
         {
 
             this.InitializeComponent();
-            Debug.WriteLine("Timee- " + FromSecond + " actual second: " + DateTime.Now.Second);
+           // Debug.WriteLine("Timee- " + FromSecond + " actual second: " + DateTime.Now.Second);
 
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
@@ -284,16 +283,15 @@ namespace AnalogueClock
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
 
-            Debug.WriteLine(e.Delta.Translation.X.ToString() + "  -------  " + e.Delta.Translation.Y.ToString());
+          //  Debug.WriteLine(e.Delta.Translation.X.ToString() + "  -------  " + e.Delta.Translation.Y.ToString());
             var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
 
-            Debug.WriteLine("X: "+Window.Current.CoreWindow.PointerPosition.X.ToString()+" Y: "+Window.Current.CoreWindow.PointerPosition.Y.ToString()+" "+TotalScreenHeight+" "+TotalScreenWidth);
+           // Debug.WriteLine("X: "+Window.Current.CoreWindow.PointerPosition.X.ToString()+" Y: "+Window.Current.CoreWindow.PointerPosition.Y.ToString()+" "+TotalScreenHeight+" "+TotalScreenWidth);
 
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
                 if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
                     Increment_Click(sender, e);
@@ -301,7 +299,6 @@ namespace AnalogueClock
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
                 if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
                     Decrement_Click(sender, e);
@@ -309,7 +306,6 @@ namespace AnalogueClock
             }
             else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
 
                 if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
                     Decrement_Click(sender, e);
@@ -317,7 +313,6 @@ namespace AnalogueClock
             }
             else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
-                CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
 
                 if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
                     Increment_Click(sender, e);
@@ -419,23 +414,23 @@ namespace AnalogueClock
 
         private void MyScrollViewer_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
+            TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
+            TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
+            var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
+            var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
+            Windows.UI.Core.CoreCursorType CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
-         
-
-            //if (e.GetCurrentPoint(OverallClockContainer).Position.X< e.GetCurrentPoint(OverallClockContainer).Position.Y)
-            //{
-            //     CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
-            //    //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.X);
-            //    //Debug.WriteLine("-===========-   " + e.GetCurrentPoint(OverallClockContainer).Position.Y);
-            //}
-            //else
-            //{
-            //    CustomCursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
-            //}
            
-          
-            //Debug.WriteLine("pointer position "+Window.Current.CoreWindow.PointerPosition);
-            Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(CustomCursorDirectionValue, 1);
+             if ((XPointerVal>TotalScreenWidth/2 && YPointerVal>TotalScreenHeight/2)||(XPointerVal<TotalScreenWidth/2 && YPointerVal<TotalScreenHeight/2))
+            {
+                CursorDirectionValue= Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
+            }
+            else
+            {
+                CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
+            }
+
+            Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(CursorDirectionValue, 1);
         }
 
         private void MyScrollViewer_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -443,9 +438,20 @@ namespace AnalogueClock
             Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 1);
         }
 
-        private void OverallClockContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void OverallContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //
+            double windowSize =e.NewSize.Height;
+            Debug.WriteLine("Value " + (windowSize - TweleveHrNumberRadius));
+            if (windowSize < 550)
+            {
+                while (windowSize-TweleveHrNumberRadius<230)
+                {
+                    Decrement_Click(sender,new RoutedEventArgs());
+                }
+            }
+
+            Debug.WriteLine("Clock size outer height:"+ outerBlack.Height+" 12hr radius:"+TweleveHrNumberRadius);
+            Debug.WriteLine("Size changed: " + e.PreviousSize + " " + e.NewSize);
         }
 
         //private void TextBlock_SizeChanged(object sender, SizeChangedEventArgs e)

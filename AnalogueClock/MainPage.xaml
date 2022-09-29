@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    SizeChanged="OverallContainer_SizeChanged"
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -29,17 +30,16 @@
 
     </Page.Resources>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center"  >
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center"    >
         <Grid.RowDefinitions>
             <RowDefinition Height="450"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <!--<RowDefinition Height="*"></RowDefinition>-->
         </Grid.RowDefinitions>
-        <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled" >
+        <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="0" x:Name="MyScrollViewer" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled"  >
 
             <Grid BorderBrush="Black" BorderThickness="2" x:Name="OverallClockContainer" Width="450" Height="450" HorizontalAlignment="Center" VerticalAlignment="Center"  
-     SizeChanged="OverallClockContainer_SizeChanged" 
                   ManipulationMode = "TranslateX, TranslateY, Scale"  
     ManipulationDelta = "t_ManipulationDelta"
                   PointerEntered="MyScrollViewer_PointerEntered" PointerExited="MyScrollViewer_PointerExited">
@@ -80,8 +80,6 @@
 
             </Grid>
         </ScrollViewer>
-
-
         <Button Margin="10" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
 
         <Button Grid.Row="2" Content="Increment" x:Name="Inc" Click="Increment_Click"></Button>
