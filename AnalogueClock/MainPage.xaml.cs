@@ -295,7 +295,7 @@ namespace AnalogueClock
         private  void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
 
-            Debug.WriteLine("Translation: "+(e.Delta.Translation.X) + " " + (e.Delta.Translation.Y));
+           // Debug.WriteLine("Translation: "+(e.Delta.Translation.X) + " " + (e.Delta.Translation.Y));
             
 
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
@@ -337,8 +337,8 @@ namespace AnalogueClock
             // zero conditions
             else if((e.Delta.Translation.X==0 || e.Delta.Translation.Y==0))
             {
-                Debug.WriteLine("Pointer: " + XPointerVal + " " + YPointerVal);
-                Debug.WriteLine("Screen: " + (TotalScreenWidth / 2) + " " + (TotalScreenHeight / 2));
+              //  Debug.WriteLine("Pointer: " + XPointerVal + " " + YPointerVal);
+              //  Debug.WriteLine("Screen: " + (TotalScreenWidth / 2) + " " + (TotalScreenHeight / 2));
                 if ((e.Delta.Translation.X == 0))
                 {
                     if ((e.Delta.Translation.Y<0 && (YPointerVal<=TotalScreenHeight /2) )||(e.Delta.Translation.Y>0 &&(YPointerVal>=TotalScreenHeight/2)))
@@ -454,8 +454,8 @@ namespace AnalogueClock
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
             Windows.UI.Core.CoreCursorType CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
-            Debug.WriteLine(XPointerVal + " " + YPointerVal);
-            Debug.WriteLine(TotalScreenHeight + " " + TotalScreenWidth);
+            //Debug.WriteLine(XPointerVal + " " + YPointerVal);
+           // Debug.WriteLine(TotalScreenHeight + " " + TotalScreenWidth);
             if (YPointerVal<=TotalScreenHeight/2 +40 && YPointerVal>=TotalScreenHeight/2-40)
             {
                 CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeWestEast;
@@ -533,8 +533,8 @@ namespace AnalogueClock
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
             
-                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
-                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
+             //   Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
+              //  Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
 
                 if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 140)
                 {
