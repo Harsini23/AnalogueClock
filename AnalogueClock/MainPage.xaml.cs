@@ -454,8 +454,18 @@ namespace AnalogueClock
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
             Windows.UI.Core.CoreCursorType CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
 
+            Debug.WriteLine(XPointerVal + " " + YPointerVal);
+            Debug.WriteLine(TotalScreenHeight + " " + TotalScreenWidth);
+            if (YPointerVal<=TotalScreenHeight/2 +40 && YPointerVal>=TotalScreenHeight/2-40)
+            {
+                CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeWestEast;
+            }
+           else if(XPointerVal<=TotalScreenWidth/2+40 && XPointerVal >= TotalScreenWidth / 2 - 40)
+            {
+                CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNorthSouth;
+            }
            
-             if ((XPointerVal>TotalScreenWidth/2 && YPointerVal>TotalScreenHeight/2)||(XPointerVal<TotalScreenWidth/2 && YPointerVal<TotalScreenHeight/2))
+            else if ((XPointerVal>TotalScreenWidth/2 && YPointerVal>TotalScreenHeight/2)||(XPointerVal<TotalScreenWidth/2 && YPointerVal<TotalScreenHeight/2))
             {
                 CursorDirectionValue= Windows.UI.Core.CoreCursorType.SizeNorthwestSoutheast;
             }
