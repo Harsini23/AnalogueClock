@@ -499,8 +499,7 @@ namespace AnalogueClock
         //increment clock size
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width < 580 )
-            {
+            
                 Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
                 Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
 
@@ -530,7 +529,7 @@ namespace AnalogueClock
                         marginAlignment(WidthExpansion);
                     }
                
-            }
+            
         }
 
         //change clock between 12 and 24 hr
