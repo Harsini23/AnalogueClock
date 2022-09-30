@@ -82,7 +82,5 @@
             <Button Margin="2"  HorizontalAlignment="Right" Grid.Row="1" Content="Dec" x:Name="Dec" Click="Decrement_Click"></Button>
             <Button Margin="2" HorizontalAlignment="Center" Grid.Row="1" x:Name="EditTime" Content="Edit time" Click="EditTime_Click" ></Button>
         </StackPanel>
-      
-
     </Grid>
 </Page>

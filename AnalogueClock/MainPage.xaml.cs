@@ -294,7 +294,9 @@ namespace AnalogueClock
         //resize on mouse drag
         private  void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-          
+
+            Debug.WriteLine("Translation: "+(e.Delta.Translation.X) + " " + (e.Delta.Translation.Y));
+            
 
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
@@ -302,7 +304,7 @@ namespace AnalogueClock
             var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
 
-
+          
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
             {
@@ -331,6 +333,27 @@ namespace AnalogueClock
                 if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
                     Increment_Click(sender, e);
                 else Decrement_Click(sender, e);
+            }
+            // zero conditions
+            else if((e.Delta.Translation.X==0 || e.Delta.Translation.Y==0))
+            {
+                Debug.WriteLine("Pointer: " + XPointerVal + " " + YPointerVal);
+                Debug.WriteLine("Screen: " + (TotalScreenWidth / 2) + " " + (TotalScreenHeight / 2));
+                if ((e.Delta.Translation.X == 0))
+                {
+                    if ((e.Delta.Translation.Y<0 && (YPointerVal<=TotalScreenHeight /2) )||(e.Delta.Translation.Y>0 &&(YPointerVal>=TotalScreenHeight/2)))
+                        Increment_Click(sender, e);
+                    else Decrement_Click(sender, e);
+                }
+
+                else if(e.Delta.Translation.Y == 0 )
+                {
+                    if( (e.Delta.Translation.X > 0 && (XPointerVal >= TotalScreenWidth / 2)) ||(e.Delta.Translation.X < 0 && ((XPointerVal <= TotalScreenWidth / 2))) )
+                    {
+                        Increment_Click(sender, e);
+                    }
+                    else Decrement_Click(sender, e);
+                }
             }
 
         }
@@ -528,8 +551,6 @@ namespace AnalogueClock
 
                         marginAlignment(WidthExpansion);
                     }
-               
-            
         }
 
         //change clock between 12 and 24 hr
