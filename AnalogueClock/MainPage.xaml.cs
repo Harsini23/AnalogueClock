@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Input;
@@ -37,12 +38,12 @@ namespace AnalogueClock
         double TotalScreenHeight ;
         int myCentreForLine;
 
-
         //public int actualButtonWidth=20;
 
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         List<TextBlock> allNumberTextBlock = new List<TextBlock>();
+       
 
         public MainPage()
         {
@@ -253,7 +254,7 @@ namespace AnalogueClock
 
         private void Decrement_Click(object sender, RoutedEventArgs e)
         {
-            if (outerBlack.Width > 250 || (outerBlack.Width > 250 && clockState == "twelve"))
+            if (outerBlack.Width > 260 )
             {
                 DecreaseClockSize();
                 if (clockState == "twelve")
@@ -261,6 +262,9 @@ namespace AnalogueClock
                     //calaculte number textblocks resizing
                     AlignDots(TweleveHrDotRadius -= 10, 6, true);
                     calculateNumberAlignment(TweleveHrNumberRadius -= 10, -270, allNumberTextBlock, 30);
+                    var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight / 2 - 10;
+
+                    marginAlignment(WidthExpansion);
                 }
                 else
                 {
@@ -268,6 +272,9 @@ namespace AnalogueClock
                     calculateNumberAlignment(TwentyFourHrNumberRadius -= 10, -270, allNumberTextBlock, 15);
 
                     AlignDots(TwentyFourHrDotRadius -= 10, 15, false);
+                    var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight / 2 - 10;
+
+                    marginAlignment(WidthExpansion);
                 }
             }
         }
@@ -277,13 +284,17 @@ namespace AnalogueClock
             myStoryBoard.Begin();
         }
 
-        //resize on mouse drag
-        private void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        public void marginAlignment( int WidthExpansion)
         {
-            var WidthExpansion =(int)  AppContainer.RowDefinitions[0].ActualHeight;
-            secondHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
-            minuteHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
-            hourHand.Margin = new Thickness(WidthExpansion/2, 0, 0, 0);
+            secondHand.Margin = new Thickness(WidthExpansion, 0, 0, 0);
+            minuteHand.Margin = new Thickness(WidthExpansion, 0, 0, 0);
+            hourHand.Margin = new Thickness(WidthExpansion, 0, 0, 0);
+        }
+
+        //resize on mouse drag
+        private  void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+          
 
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
@@ -291,7 +302,6 @@ namespace AnalogueClock
             var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
 
-         
 
             if ((e.Delta.Translation.X > 0 && e.Delta.Translation
              .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
@@ -442,10 +452,7 @@ namespace AnalogueClock
         private void OverallContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // do for 24 hr clock
-            var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight;
-            secondHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
-            minuteHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
-            hourHand.Margin = new Thickness(WidthExpansion / 2, 0, 0, 0);
+          
 
             double windowSizeHeight =e.NewSize.Height;
             double windowSizeWidth =e.NewSize.Width;
@@ -477,10 +484,10 @@ namespace AnalogueClock
         {
             if (outerBlack.Width < 580 )
             {
-                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth +" "+( TweleveHrNumberRadius * 2 + 200));
+                Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
                 Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
 
-                if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 200 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 200)
+                if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 140)
                 {
                     if (clockState == "twelve")
                     {
@@ -488,6 +495,9 @@ namespace AnalogueClock
                         calculateNumberAlignment(TweleveHrNumberRadius += 10, -270, allNumberTextBlock, 30);
                         AlignDots(TweleveHrDotRadius += 10, 6, true);
                         IncreaseClockSize();
+                        var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight / 2 + 10;
+
+                        marginAlignment(WidthExpansion);
                     }
                 }
                 
@@ -498,6 +508,9 @@ namespace AnalogueClock
                     calculateNumberAlignment(TwentyFourHrNumberRadius += 10, -270, allNumberTextBlock, 15);
                     AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                         IncreaseClockSize();
+                        var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight / 2 + 10;
+
+                        marginAlignment(WidthExpansion);
                     }
                
             }

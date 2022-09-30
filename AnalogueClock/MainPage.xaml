@@ -83,5 +83,6 @@
             <Button Margin="2" HorizontalAlignment="Center" Grid.Row="1" x:Name="EditTime" Content="Edit time" Click="EditTime_Click" ></Button>
         </StackPanel>
       
+
     </Grid>
 </Page>
