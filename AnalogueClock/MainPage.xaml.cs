@@ -451,32 +451,49 @@ namespace AnalogueClock
 
         private void OverallContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // do for 24 hr clock
-          
-
             double windowSizeHeight =e.NewSize.Height;
             double windowSizeWidth =e.NewSize.Width;
 
-            Debug.WriteLine(windowSizeHeight);
-            Debug.WriteLine(TweleveHrNumberRadius);
+            //Debug.WriteLine(windowSizeHeight);
+            //Debug.WriteLine(TweleveHrNumberRadius);
          
             if (windowSizeHeight < 580 )
             {
-                while (windowSizeHeight < TweleveHrNumberRadius*2 + 140 )
+                if (clockState == "twelve")
                 {
-                    Decrement_Click(sender, new RoutedEventArgs());
+                    while (windowSizeHeight < TweleveHrNumberRadius * 2 + 140)
+                    {
+                        Decrement_Click(sender, new RoutedEventArgs());
+                    }
                 }
+                else
+                {
+                    while(windowSizeHeight< TwentyFourHrNumberRadius*2 + 140)
+                    {
+                        Decrement_Click(sender, new RoutedEventArgs());
+                    }
+                }
+              
             }
             if(windowSizeWidth < 700)
             {
-                while(windowSizeWidth< TweleveHrNumberRadius*2 + 140)
+                if (clockState == "twelve")
                 {
-                    Decrement_Click(sender, new RoutedEventArgs());
+                    while (windowSizeWidth < TweleveHrNumberRadius * 2 + 140)
+                    {
+                        Decrement_Click(sender, new RoutedEventArgs());
+                    }
                 }
+                else
+                {
+                    while (windowSizeWidth < TwentyFourHrNumberRadius * 2 + 140)
+                    {
+                        Decrement_Click(sender, new RoutedEventArgs());
+                    }
+                }
+               
             }
 
-
-         
         }
 
         //increment clock size
