@@ -36,6 +36,8 @@ namespace AnalogueClock
         int extraHour = 0;
         double TotalScreenWidth ;
         double TotalScreenHeight ;
+
+        bool controlMinimizedToExtent=false;
         int myCentreForLine;
 
         //public int actualButtonWidth=20;
@@ -43,7 +45,6 @@ namespace AnalogueClock
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         List<TextBlock> allNumberTextBlock = new List<TextBlock>();
-       
 
         public MainPage()
         {
@@ -277,6 +278,10 @@ namespace AnalogueClock
                     marginAlignment(WidthExpansion);
                 }
             }
+            else
+            {
+                controlMinimizedToExtent = true;
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -296,8 +301,6 @@ namespace AnalogueClock
         {
 
            // Debug.WriteLine("Translation: "+(e.Delta.Translation.X) + " " + (e.Delta.Translation.Y));
-            
-
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
          
@@ -473,13 +476,15 @@ namespace AnalogueClock
             {
                 CursorDirectionValue = Windows.UI.Core.CoreCursorType.SizeNortheastSouthwest;
             }
-
             Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(CursorDirectionValue, 1);
         }
 
         private void Overall_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Windows.UI.Xaml.Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 1);
+          
+
+
         }
 
         private void OverallContainer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -529,12 +534,36 @@ namespace AnalogueClock
 
         }
 
+        private void OverallClockContainer_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            controlMinimizedToExtent = false;
+        }
+
+        private void AppContainer_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            controlMinimizedToExtent = false;
+
+        }
+
+
+
         //increment clock size
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
-            
-             //   Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
-              //  Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
+            if (controlMinimizedToExtent == true)
+            {
+                Debug.WriteLine("Not increasing");
+                Debug.WriteLine(controlMinimizedToExtent.ToString());
+                return;
+            }
+
+            //   Debug.WriteLine((int)((Frame)Window.Current.Content).ActualWidth + " " + (TweleveHrNumberRadius * 2 + 200));
+            //  Debug.WriteLine((int)((Frame)Window.Current.Content).ActualHeight + " " + (TweleveHrNumberRadius * 2 + 200));
+
+            if (controlMinimizedToExtent == false)
+            {
+                Debug.WriteLine("increasing");
+                Debug.WriteLine(controlMinimizedToExtent.ToString());
 
                 if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 140)
                 {
@@ -549,18 +578,24 @@ namespace AnalogueClock
                         marginAlignment(WidthExpansion);
                     }
                 }
-                
-               if((int)((Frame)Window.Current.Content).ActualWidth >= TwentyFourHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TwentyFourHrNumberRadius * 2 + 140)
-                if(clockState=="twentyfour")
-                {
-                    //calaculte number textblocks resizing
-                    calculateNumberAlignment(TwentyFourHrNumberRadius += 10, -270, allNumberTextBlock, 15);
-                    AlignDots(TwentyFourHrDotRadius += 10, 15, false);
+
+                if ((int)((Frame)Window.Current.Content).ActualWidth >= TwentyFourHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TwentyFourHrNumberRadius * 2 + 140)
+                    if (clockState == "twentyfour")
+                    {
+                        //calaculte number textblocks resizing
+                        calculateNumberAlignment(TwentyFourHrNumberRadius += 10, -270, allNumberTextBlock, 15);
+                        AlignDots(TwentyFourHrDotRadius += 10, 15, false);
                         IncreaseClockSize();
                         var WidthExpansion = (int)AppContainer.RowDefinitions[0].ActualHeight / 2 + 10;
 
                         marginAlignment(WidthExpansion);
                     }
+            }
+            else
+            {
+                Debug.WriteLine("break");
+            }
+               
         }
 
         //change clock between 12 and 24 hr

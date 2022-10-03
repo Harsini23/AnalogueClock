@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     SizeChanged="OverallContainer_SizeChanged"
+    PointerReleased="AppContainer_PointerReleased"
+    PointerPressed="AppContainer_PointerReleased"
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -30,7 +32,7 @@
 
     </Page.Resources>
 
-    <Grid HorizontalAlignment="Center" Name="AppContainer" VerticalAlignment="Center"    >
+    <Grid PointerReleased="AppContainer_PointerReleased"  PointerPressed="AppContainer_PointerReleased" HorizontalAlignment="Center" Name="AppContainer" VerticalAlignment="Center"    >
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
@@ -41,7 +43,8 @@
                 <Grid BorderBrush="Black" BorderThickness="2" x:Name="OverallClockContainer"  HorizontalAlignment="Center" VerticalAlignment="Center"  
                   ManipulationMode = "TranslateX, TranslateY, Scale"  
     ManipulationDelta = "t_ManipulationDelta"
-                  PointerEntered="Overall_PointerEntered" PointerExited="Overall_PointerExited">
+                  PointerEntered="Overall_PointerEntered" PointerExited="Overall_PointerExited" PointerReleased="OverallClockContainer_PointerReleased" 
+                      >
                
                     <Ellipse x:Name="outerBlack" Width="280" Height="{x:Bind outerBlack.Width}" StrokeThickness="20" Stroke="Black" Fill="LightGray"></Ellipse>
                     <Ellipse x:Name="innerBlack" Width="270" Height="{x:Bind innerBlack.Width}" StrokeThickness="20" Stroke="Black"  Fill="LightGray"></Ellipse>
@@ -76,7 +79,7 @@
                     <Canvas Name="DotCanvas" Width="260" Height="{x:Bind DotCanvas.Width}" ></Canvas>
 
                 </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" PointerReleased="AppContainer_PointerReleased">
             <Button Margin="2"  Grid.Row="1"  HorizontalAlignment="Center"  x:Name="Change" Click="Change_Click" Content="Change clock"></Button>
             <Button Margin="2" Grid.Row="1"  Content="Inc" x:Name="Inc" Click="Increment_Click" HorizontalAlignment="Left"></Button>
             <Button Margin="2"  HorizontalAlignment="Right" Grid.Row="1" Content="Dec" x:Name="Dec" Click="Decrement_Click"></Button>
