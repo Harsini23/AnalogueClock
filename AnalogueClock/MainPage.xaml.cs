@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Input;
@@ -29,6 +30,9 @@ namespace AnalogueClock
         public int FromSecond = -90 + DateTime.Now.Second * 6;
         public int ToSecond = 360 + (-90 + DateTime.Now.Second * 6);
 
+        int x = 0;
+        double prev = 0;
+
         bool EditTimeflag = false;
         bool TwelveHrSubscriber = false;
         bool TwentyFourHrSubscriber = false;
@@ -41,16 +45,29 @@ namespace AnalogueClock
         int myCentreForLine;
 
         //public int actualButtonWidth=20;
-
+       
 
         List<TextBlock> allDotsTextBlock = new List<TextBlock>();
         List<TextBlock> allNumberTextBlock = new List<TextBlock>();
 
         public MainPage()
         {
-
+                
             this.InitializeComponent();
-           
+
+            //Getting previously adjusted value
+            Windows.Storage.ApplicationDataContainer localSettings =
+       Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataCompositeValue TimeDifference =
+     (Windows.Storage.ApplicationDataCompositeValue)localSettings.Values["EditedTimeDifference"];
+
+            if (TimeDifference != null)
+            {
+                extraMinute = (int)TimeDifference["minuteValue"];
+                extraHour = (int)TimeDifference["hourValue"];
+            }
+          
+
             //initialize to modify visiblity and access all textboxes
             //intializing textblocks 12 hr
             List<TextBlock> NumberTextBlock = new List<TextBlock>();
@@ -81,6 +98,7 @@ namespace AnalogueClock
 
             myCentreForLine = (int)((Frame)Window.Current.Content).ActualWidth / 2;
         }
+      
 
         //increase size
         public void IncreaseClockSize()
@@ -253,9 +271,9 @@ namespace AnalogueClock
             secondHand.X1 = 115; minuteHand.X1 = 105; hourHand.X1 = 70;
         }
 
-        private void Decrement_Click(object sender, RoutedEventArgs e)
+        private void DecreaseSize()
         {
-            if (outerBlack.Width > 260 )
+            if (outerBlack.Width > 260)
             {
                 DecreaseClockSize();
                 if (clockState == "twelve")
@@ -283,6 +301,10 @@ namespace AnalogueClock
                 controlMinimizedToExtent = true;
             }
         }
+        private void Decrement_Click(object sender, RoutedEventArgs e)
+        {
+            DecreaseSize();
+        }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -299,65 +321,77 @@ namespace AnalogueClock
         //resize on mouse drag
         private  void t_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
+            //Debug.WriteLine(e.Delta.Scale.ToString());
+           
+            if (e.Delta.Translation.X!= prev || e.Delta.Translation.Y!=prev)
+            {
+                x++;
+                if(e.Delta.Translation.X != 0) prev = e.Delta.Translation.X;
+                else prev= e.Delta.Translation.Y;
+            }
 
-           // Debug.WriteLine("Translation: "+(e.Delta.Translation.X) + " " + (e.Delta.Translation.Y));
             TotalScreenWidth = ((Frame)Window.Current.Content).ActualWidth;
             TotalScreenHeight = ((Frame)Window.Current.Content).ActualHeight;
          
             var XPointerVal = Window.Current.CoreWindow.PointerPosition.X;
             var YPointerVal = Window.Current.CoreWindow.PointerPosition.Y;
 
-          
-            if ((e.Delta.Translation.X > 0 && e.Delta.Translation
-             .Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
+            if (x % 5 == 0)
             {
-
-                if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
-                    Increment_Click(sender, e);
-                else Decrement_Click(sender, e);
-            }
-            else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
-            {
-
-                if (XPointerVal >= TotalScreenWidth/2 || YPointerVal >= TotalScreenHeight/2)
-                    Decrement_Click(sender, e);
-                else Increment_Click(sender, e);
-            }
-            else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0) && (int)e.Delta.Translation.X % 3 == 0)
-            {
-
-                if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
-                    Decrement_Click(sender, e);
-                else Increment_Click(sender, e);
-            }
-            else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0) && (int)e.Delta.Translation.X % 3 == 0)
-            {
-
-                if (XPointerVal >= TotalScreenWidth/2 && YPointerVal <= TotalScreenHeight/2)
-                    Increment_Click(sender, e);
-                else Decrement_Click(sender, e);
-            }
-            // zero conditions
-            else if((e.Delta.Translation.X==0 || e.Delta.Translation.Y==0))
-            {
-              //  Debug.WriteLine("Pointer: " + XPointerVal + " " + YPointerVal);
-              //  Debug.WriteLine("Screen: " + (TotalScreenWidth / 2) + " " + (TotalScreenHeight / 2));
-                if ((e.Delta.Translation.X == 0))
+                x = 1;
+                if ((e.Delta.Translation.X > 0 && e.Delta.Translation
+          .Y > 0))
                 {
-                    if ((e.Delta.Translation.Y<0 && (YPointerVal<=TotalScreenHeight /2) )||(e.Delta.Translation.Y>0 &&(YPointerVal>=TotalScreenHeight/2)))
-                        Increment_Click(sender, e);
-                    else Decrement_Click(sender, e);
+                    if (XPointerVal >= TotalScreenWidth / 2 || YPointerVal >= TotalScreenHeight / 2)
+                        IncrementSize();
+                    else DecreaseSize();
                 }
-
-                else if(e.Delta.Translation.Y == 0 )
+                else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y < 0))
                 {
-                    if( (e.Delta.Translation.X > 0 && (XPointerVal >= TotalScreenWidth / 2)) ||(e.Delta.Translation.X < 0 && ((XPointerVal <= TotalScreenWidth / 2))) )
+
+                    if (XPointerVal >= TotalScreenWidth / 2 || YPointerVal >= TotalScreenHeight / 2)
+                        DecreaseSize();
+                    else IncrementSize();
+                }
+                else if ((e.Delta.Translation.X < 0 && e.Delta.Translation.Y > 0))
+                {
+
+                    if (XPointerVal >= TotalScreenWidth / 2 && YPointerVal <= TotalScreenHeight / 2)
+                        DecreaseSize();
+                    else IncrementSize();
+                }
+                else if ((e.Delta.Translation.X > 0 && e.Delta.Translation.Y < 0))
+                {
+
+                    if (XPointerVal >= TotalScreenWidth / 2 && YPointerVal <= TotalScreenHeight / 2)
+                        IncrementSize();
+                    else DecreaseSize();
+                }
+                // zero conditions
+                else if ((e.Delta.Translation.X == 0 || e.Delta.Translation.Y == 0))
+                {
+                    //  Debug.WriteLine("Pointer: " + XPointerVal + " " + YPointerVal);
+                    //  Debug.WriteLine("Screen: " + (TotalScreenWidth / 2) + " " + (TotalScreenHeight / 2));
+                    if ((e.Delta.Translation.X == 0))
                     {
-                        Increment_Click(sender, e);
+                        if ((e.Delta.Translation.Y < 0 && (YPointerVal <= TotalScreenHeight / 2)) || (e.Delta.Translation.Y > 0 && (YPointerVal >= TotalScreenHeight / 2)))
+                            IncrementSize();
+                        else DecreaseSize();
                     }
-                    else Decrement_Click(sender, e);
+
+                    else if (e.Delta.Translation.Y == 0)
+                    {
+                        if ((e.Delta.Translation.X > 0 && (XPointerVal >= TotalScreenWidth / 2)) || (e.Delta.Translation.X < 0 && ((XPointerVal <= TotalScreenWidth / 2))))
+                        {
+                            IncrementSize();
+                        }
+                        else DecreaseSize();
+                    }
                 }
+
             }
+
+
 
         }
 
@@ -389,8 +423,22 @@ namespace AnalogueClock
                 editTimeState = false;
                 EditTimeflag = false;
                 secondHand.Visibility = Visibility.Visible;
+
+                // setting modified app data
+                Windows.Storage.ApplicationDataContainer localSettings =
+    Windows.Storage.ApplicationData.Current.LocalSettings;
+                Windows.Storage.ApplicationDataCompositeValue TimeDifference =
+    new Windows.Storage.ApplicationDataCompositeValue();
+                TimeDifference["minuteValue"] = extraMinute;
+                TimeDifference["hourValue"] = extraHour;
+
+                localSettings.Values["EditedTimeDifference"] = TimeDifference;
+
+
             }
         }
+
+        
 
         //on mouse wheel scroll activation
         private void MyScrollViewer_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
@@ -501,14 +549,14 @@ namespace AnalogueClock
                 {
                     while (windowSizeHeight < TweleveHrNumberRadius * 2 + 140)
                     {
-                        Decrement_Click(sender, new RoutedEventArgs());
+                        DecreaseSize();
                     }
                 }
                 else
                 {
                     while(windowSizeHeight< TwentyFourHrNumberRadius*2 + 140)
                     {
-                        Decrement_Click(sender, new RoutedEventArgs());
+                        DecreaseSize();
                     }
                 }
               
@@ -519,14 +567,14 @@ namespace AnalogueClock
                 {
                     while (windowSizeWidth < TweleveHrNumberRadius * 2 + 140)
                     {
-                        Decrement_Click(sender, new RoutedEventArgs());
+                        DecreaseSize();
                     }
                 }
                 else
                 {
                     while (windowSizeWidth < TwentyFourHrNumberRadius * 2 + 140)
                     {
-                        Decrement_Click(sender, new RoutedEventArgs());
+                        DecreaseSize();
                     }
                 }
                
@@ -545,15 +593,12 @@ namespace AnalogueClock
 
         }
 
-
-
-        //increment clock size
-        private void Increment_Click(object sender, RoutedEventArgs e)
+        private void IncrementSize()
         {
             if (controlMinimizedToExtent == true)
             {
-                Debug.WriteLine("Not increasing");
-                Debug.WriteLine(controlMinimizedToExtent.ToString());
+                // Debug.WriteLine("Not increasing");
+                //Debug.WriteLine(controlMinimizedToExtent.ToString());
                 return;
             }
 
@@ -562,8 +607,8 @@ namespace AnalogueClock
 
             if (controlMinimizedToExtent == false)
             {
-                Debug.WriteLine("increasing");
-                Debug.WriteLine(controlMinimizedToExtent.ToString());
+                //Debug.WriteLine("increasing");
+                // Debug.WriteLine(controlMinimizedToExtent.ToString());
 
                 if ((int)((Frame)Window.Current.Content).ActualWidth >= TweleveHrNumberRadius * 2 + 140 && (int)((Frame)Window.Current.Content).ActualHeight >= TweleveHrNumberRadius * 2 + 140)
                 {
@@ -593,9 +638,16 @@ namespace AnalogueClock
             }
             else
             {
-                Debug.WriteLine("break");
+                //Debug.WriteLine("break");
             }
-               
+        }
+
+
+        //increment clock size
+        private void Increment_Click(object sender, RoutedEventArgs e)
+        {
+
+            IncrementSize();      
         }
 
         //change clock between 12 and 24 hr
